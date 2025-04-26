@@ -1,6 +1,7 @@
 # Project files #
 #################
 x64
+chip8Emulator/x64
 chip8Emulator/.vs
 .vs
 
