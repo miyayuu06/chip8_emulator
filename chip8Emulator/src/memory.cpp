@@ -7,8 +7,8 @@ namespace chip8 {
 	Memory::~Memory() {
 	}
 
-	uint8_t Memory::read(uint16_t address) {
-		return _space[address];
+	uint16_t Memory::read(uint16_t address) {
+		return (_space[address] << 8) + _space[address + 1];
 	}
 
 	void Memory::write(uint16_t address, uint8_t data) {

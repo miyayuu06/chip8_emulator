@@ -9,8 +9,8 @@ using namespace chip8;
 
 int main()
 {
-    Chip8 prueba;
-    prueba.rom("C:/Users/yunaf/Desktop/wonkypong.ch8");
+    Chip8 chip8;
+    chip8.load_rom("C:/Users/yunaf/Desktop/wonkypong.ch8");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

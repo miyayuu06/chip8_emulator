@@ -1,7 +1,7 @@
 #pragma once
 
 #include "memory.h"
-#include "registers.h"
+#include "instruction.h"
 
 #include <iostream>
 #include <vector>
@@ -12,11 +12,11 @@
 namespace chip8 {
 	class Chip8 {
 	public:
-		const uint16_t PROGRAM_START = 0x20;
+		const uint16_t PROGRAM_START = 0x200;
 		Chip8();
 		~Chip8();
 
-		void rom(std::string x);
+		void load_rom(std::string x);
 
 		uint32_t _opcode;
 

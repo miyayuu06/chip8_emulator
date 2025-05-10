@@ -19,7 +19,7 @@ namespace chip8 {
 		delete[] _stack;
 	}
 
-	void Chip8::rom(std::string path) {
+	void Chip8::load_rom(std::string path) {
 		std::ifstream rf(path, std::ios::out | std::ios::binary);
 		if (!rf) {
 			std::cout << "Can not access file, sowwy!" << std::endl;
@@ -29,9 +29,14 @@ namespace chip8 {
 		std::vector<uint8_t> programData(fileSize);
 		rf.read((char*)programData.data(), fileSize);
 		rf.close();
-		_memory.write(0x200, programData.data(), programData.size());
-		for (int i = 0x200; i < 4096; i++) {
-			std::cout << _memory.read(i);
+		_memory.write(PROGRAM_START, programData.data(), programData.size());
+		while (_PC - PROGRAM_START < programData.size()) {
+			uint16_t operationCode = _memory.read(_PC);
+			uint16_t previousPC = _PC;
+			std::cout << Instruction::decode(operationCode, _PC, _registers) << " " << +_PC << std::endl;
+			if (previousPC == _PC) {
+				_PC += 2;
+			}
 		}
 	}
 
