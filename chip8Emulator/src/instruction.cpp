@@ -4,11 +4,21 @@
 #include <cassert>
 
 namespace chip8 {
-	std::string Instruction::decode(uint16_t ins, uint16_t& programCounter, Registers& registers) {
+	std::string Instruction::decode(uint16_t ins, uint16_t& programCounter, Registers& registers, Display& display) {
 		int insType = ins >> 12;
 		std::string type;
 		switch (insType) {
 		case 0:
+			switch (ins & 0xF00) {
+			case 0:
+				if (ins & 0xF) {
+				} else {
+					OP_00E0(display);
+				}
+				break;
+			default:
+				std::cout << "SYS addr" << std::endl;
+			}
 			type = "Display things";
 			break;
 		case 1:
@@ -22,31 +32,51 @@ namespace chip8 {
 			type = "Stand skip";
 			OP_3xkk(ins, programCounter, registers);
 			break;
-			/*
 		case 4:
 			type = "Skip Neq";
+			OP_4xkk(ins, programCounter, registers);
 			break;
 		case 5:
-			type = "Skip Eq";
-			break;*/
+			type = "Skip eq";
+			OP_5xy0(ins, programCounter, registers);
+			break;
 		case 6:
 			type = "Set reg";
 			OP_6xkk(ins, registers);
 			break;
 		/*case 7:
 			type = "Add value";
-			break;
+			break;*/
 		case 8:
 			type = "Byte operations";
+			switch (ins & 0xF) {
+			case 0:
+				OP_8xy0(ins, registers);
+				break;
+			case 4:
+				OP_8xy4(ins, registers);
+				break;
+			case 5:
+				OP_8xy5(ins, registers);
+				break;
+			default:
+				std::cout << std::endl << 8 << " " << (ins & 0xF) << std::endl;
+				assert(0);
+				break;
+			}
 			break;
-		case 9:
+		/*case 9:
 			type = "CPU stuff";
+			break;*/
+		case 10:
+			type = "A instruction";
+			OP_Annn(ins, registers);
 			break;
 		case 15:
 			type = "F instruction";
-			break;*/
+			break;
 		default:
-			std::cout << insType << std::endl;
+			std::cout << std::endl << insType << std::endl;
 			assert(0);
 			break;
 		}
@@ -54,6 +84,14 @@ namespace chip8 {
 	}
 
 	// Instruction with unique first digit
+
+	void Instruction::OP_00E0(Display& display) {
+		for (int i = 0; i < 64; i++) {
+			for (int j = 0; j < 32; j++) {
+				display.write(i, j, false);
+			}
+		}
+	}
 
 	void Instruction::OP_1nnn(uint16_t operationCode, uint16_t& programCounter) {
 		programCounter = (operationCode & 0xFFF);
@@ -64,29 +102,26 @@ namespace chip8 {
 	//	_PC = _opcode & 0xFFFu;
 	//}
 
-	void Instruction::OP_3xkk(uint16_t& operationCode, uint16_t programCounter, Registers& reg) {
+	void Instruction::OP_3xkk(uint16_t operationCode, uint16_t& programCounter, Registers& reg) {
 		if (reg.read((operationCode & 0xF00) >> 8u) == (operationCode & 0xFF)) {
 			programCounter += 2;
 		}
 	}
 
-	//void Instruction::OP_4xkk() {
-	//	uint8_t Vx = (_opcode & 0xF00) >> 8u;
-	//	uint16_t kk = _opcode & 0xFF;
+	void Instruction::OP_4xkk(uint16_t operationCode, uint16_t& programCounter, Registers& reg) {
+		if (reg.read((operationCode & 0xF00) >> 8u) != (operationCode & 0xFF)) {
+			programCounter += 2;
+		}
+	}
 
-	//	if (_registers[Vx] != kk) {
-	//		_PC += 2;
-	//	}
-	//}
+	void Instruction::OP_5xy0(uint16_t operationCode, uint16_t& programCounter, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8u;
+		uint16_t Vy = (operationCode & 0xF0) >> 4u;
 
-	//void Instruction::OP_5xy0() {
-	//	uint8_t Vx = (_opcode & 0xF00) >> 8u;
-	//	uint16_t Vy = (_opcode & 0xF0) >> 4u;
-
-	//	if (_registers[Vx] == _registers[Vy]) {
-	//		_PC += 2;
-	//	}
-	//}
+		if (reg.read(Vy) == reg.read(Vy)) {
+			programCounter += 2;
+		}
+	}
 
 	void Instruction::OP_6xkk(uint16_t operationCode, Registers& registers) {
 		registers.write((operationCode & 0xF00) >> 8, operationCode & 0xFF);
@@ -108,7 +143,9 @@ namespace chip8 {
 	//	}
 	//}
 
-	//void Instruction::OP_Annn() {}
+	void Instruction::OP_Annn(uint16_t operationCode, Registers& reg) {
+		reg.write(0xF, operationCode & 0xFFF);
+	}
 
 	//void Instruction::OP_Bnnn() {}
 
@@ -118,74 +155,72 @@ namespace chip8 {
 
 	//// Instructions that begin with 8
 
-	//void Instruction::OP_8xy0() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
+	void Instruction::OP_8xy0(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
 
-	//	_registers[Vx] = _registers[Vy];
-	//}
+		reg.write(Vx, reg.read(Vy));
+	}
 
-	//void Instruction::OP_8xy1() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
+	void Instruction::OP_8xy1(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
 
-	//	_registers[Vx] |= _registers[Vy];
-	//}
+		reg.write(Vx, reg.read(Vx) | reg.read(Vy));
+	}
 
-	//void Instruction::OP_8xy2() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
+	void Instruction::OP_8xy2(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
 
-	//	_registers[Vx] &= _registers[Vy];
-	//}
+		reg.write(Vx, reg.read(Vx) & reg.read(Vy));
+	}
 
-	//void Instruction::OP_8xy3() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
+	void Instruction::OP_8xy3(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
 
-	//	_registers[Vx] ^= _registers[Vy];
-	//}
+		reg.write(Vx, reg.read(Vx) ^ reg.read(Vy));
+	}
 
-	//void Instruction::OP_8xy4() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
-	//	uint16_t result = _registers[Vx] + _registers[Vy];
+	void Instruction::OP_8xy4(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
+		uint16_t result = reg.read(Vx) + reg.read(Vy);
 
-	//	_registers[0xF] = result / 256;
+		reg.write(0xF, result / 256);
+		reg.write(Vx, result & 0xFF);
+	}
 
-	//	_registers[Vx] = result & 0xFF;
-	//}
+	void Instruction::OP_8xy5(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
+		uint16_t result = reg.read(Vx) - reg.read(Vy);
+		reg.write(0xF, result > 0);
+		reg.write(Vx, result);
+	}
 
-	//void Instruction::OP_8xy5() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
+	void Instruction::OP_8xy6(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
 
+		/*_registers[0xF] = _registers[Vx] & 1;
+		_registers[Vx] >= 1;*/
+	}
 
-	//	_registers[0xF] = (_registers[Vx] > _registers[Vy]);
-	//	_registers[Vx] -= _registers[Vy];
-	//}
+	void Instruction::OP_8xy7(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
 
-	//void Instruction::OP_8xy6() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
+		/*_registers[0xF] = (_registers[Vx] < _registers[Vy]);
+		_registers[Vx] = _registers[Vy] - _registers[Vx];*/
+	}
 
-	//	_registers[0xF] = _registers[Vx] & 1;
-	//	_registers[Vx] >= 1;
-	//}
+	void Instruction::OP_8xyE(uint16_t operationCode, Registers& reg) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vy = (operationCode & 0xF0) >> 4;
 
-	//void Instruction::OP_8xy7() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
-
-	//	_registers[0xF] = (_registers[Vx] < _registers[Vy]);
-	//	_registers[Vx] = _registers[Vy] - _registers[Vx];
-	//}
-
-	//void Instruction::OP_8xyE() {
-	//	uint8_t Vx = (_opcode & 0xF00u) >> 8u;
-	//	uint8_t Vy = (_opcode & 0xF0u) >> 4u;
-
-	//	_registers[0xF] = _registers[Vx] & 1;
-	//	_registers[Vx] <= 1;
-	//}
+		/*_registers[0xF] = _registers[Vx] & 1;
+		_registers[Vx] <= 1;*/
+	}
 }

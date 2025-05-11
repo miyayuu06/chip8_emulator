@@ -9,8 +9,6 @@ namespace chip8 {
 		/*_delayTimer = Timer::Timer();
 		_soundTimer = Timer::Timer(); */
 
-		_opcode = 0x00;
-
 		_PC = Chip8::PROGRAM_START;
 	}
 
@@ -33,7 +31,16 @@ namespace chip8 {
 		while (_PC - PROGRAM_START < programData.size()) {
 			uint16_t operationCode = _memory.read(_PC);
 			uint16_t previousPC = _PC;
-			std::cout << Instruction::decode(operationCode, _PC, _registers) << " " << +_PC << std::endl;
+			std::cout << Instruction::decode(operationCode, _PC, _registers, _display) << " " << +_PC << std::endl;
+			
+			/* Debugging, checking registers */
+
+			for (int i = 0; i < 16; i++) {
+				std::cout << (i) << " " << +(_registers.read(i)) << " ";
+			}
+			std::cout  << "Finished \n";
+
+			/* End of debugging */
 			if (previousPC == _PC) {
 				_PC += 2;
 			}

@@ -18,10 +18,9 @@ namespace chip8 {
 
 		void load_rom(std::string x);
 
-		uint32_t _opcode;
-
 		Registers _registers;
 		Memory _memory;
+		Display _display;
 		uint8_t* _keypad;
 
 		uint16_t _PC;

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\chip8.cpp" />
+    <ClCompile Include="src\display.cpp" />
     <ClCompile Include="src\instruction.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\memory.cpp" />
@@ -27,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\chip8.h" />
+    <ClInclude Include="include\display.h" />
     <ClInclude Include="include\instruction.h" />
     <ClInclude Include="include\memory.h" />
     <ClInclude Include="include\registers.h" />
