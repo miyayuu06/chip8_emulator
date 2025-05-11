@@ -1,5 +1,6 @@
 #include "chip8.h"
 #include <filesystem>
+#include <Windows.h>
 
 namespace chip8 {
 	Chip8::Chip8() {
@@ -44,6 +45,12 @@ namespace chip8 {
 			if (previousPC == _PC) {
 				_PC += 2;
 			}
+			for (int k = 0; k < 256; k++) {
+				if (GetAsyncKeyState(k) & 0x8000) {
+					std::cout << "Pressed!" << std::endl; break;
+				}
+			}
+			Sleep(167);
 		}
 	}
 

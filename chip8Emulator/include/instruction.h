@@ -39,5 +39,12 @@ namespace chip8 {
 		static void OP_8xyE(uint16_t operationCode, Registers& reg);
 
 		/* F instructions */
+
+		static void OP_Fx07();
+		static void OP_Fx0A();
+		static void OP_Fx15();
+		static void OP_Fx18();
+		static void OP_Fx1E(uint16_t operationCode, Registers& reg);
+		static void OP_Fx29();
 	};
 }

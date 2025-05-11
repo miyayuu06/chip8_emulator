@@ -74,6 +74,13 @@ namespace chip8 {
 			break;
 		case 15:
 			type = "F instruction";
+			std::cout << "Type " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << " ";
+			switch ((ins & 0xF0) >> 4) {
+			case 1:
+				if ((ins & 0xF) == 0xE) {
+					//OP_Fx1E(ins, registers);
+				}
+			}
 			break;
 		default:
 			std::cout << std::endl << insType << std::endl;
@@ -153,7 +160,7 @@ namespace chip8 {
 
 	//void Instruction::OP_Dxyn() {}
 
-	//// Instructions that begin with 8
+	/* 8 type instructions */
 
 	void Instruction::OP_8xy0(uint16_t operationCode, Registers& reg) {
 		uint8_t Vx = (operationCode & 0xF00) >> 8;
@@ -223,4 +230,10 @@ namespace chip8 {
 		/*_registers[0xF] = _registers[Vx] & 1;
 		_registers[Vx] <= 1;*/
 	}
+
+	/* F type instructions */
+	/*void OP_Fx1E(uint16_t operationCode, Registers& reg) {
+		uint16_t result = reg.read(0xF) + reg.read((operationCode & 0xF00) >> 12);
+		reg.write(0xF, result);
+	}*/
 }
