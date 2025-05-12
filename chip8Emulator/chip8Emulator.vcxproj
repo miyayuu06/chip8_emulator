@@ -25,6 +25,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\memory.cpp" />
     <ClCompile Include="src\registers.cpp" />
+    <ClCompile Include="src\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\chip8.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="include\instruction.h" />
     <ClInclude Include="include\memory.h" />
     <ClInclude Include="include\registers.h" />
+    <ClInclude Include="include\timer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

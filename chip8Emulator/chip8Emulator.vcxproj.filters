@@ -32,6 +32,9 @@
     <ClCompile Include="src\display.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\timer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\chip8.h">
@@ -47,6 +50,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\display.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\timer.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

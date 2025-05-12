@@ -1,12 +1,14 @@
 #pragma once
 #include "registers.h"
 #include "display.h"
+#include "timer.h"
+
 #include <string>
 
 namespace chip8 {
 	class Instruction {
 	public:
-		static std::string decode(uint16_t, uint16_t&, Registers&, Display&);
+		static std::string decode(uint16_t, uint16_t&, Registers&, Display&, Timer& delay, Timer& sound);
 
 		static void OP_00E0(Display& display);
 		//static void OP_00EE();
@@ -40,7 +42,7 @@ namespace chip8 {
 
 		/* F instructions */
 
-		static void OP_Fx07();
+		static void OP_Fx07(uint16_t operationCode, Registers& reg, Timer& delay);
 		static void OP_Fx0A();
 		static void OP_Fx15();
 		static void OP_Fx18();

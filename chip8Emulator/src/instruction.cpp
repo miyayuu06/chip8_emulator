@@ -4,7 +4,7 @@
 #include <cassert>
 
 namespace chip8 {
-	std::string Instruction::decode(uint16_t ins, uint16_t& programCounter, Registers& registers, Display& display) {
+	std::string Instruction::decode(uint16_t ins, uint16_t& programCounter, Registers& registers, Display& display, Timer& delay, Timer& sound) {
 		int insType = ins >> 12;
 		std::string type;
 		switch (insType) {
@@ -60,7 +60,7 @@ namespace chip8 {
 				OP_8xy5(ins, registers);
 				break;
 			default:
-				std::cout << std::endl << 8 << " " << (ins & 0xF) << std::endl;
+				std::cout << std::endl << 8 << " " << +(ins & 0xF) << std::endl;
 				assert(0);
 				break;
 			}
@@ -74,8 +74,12 @@ namespace chip8 {
 			break;
 		case 15:
 			type = "F instruction";
-			std::cout << "Type " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << " ";
+			std::cout << "Type " << +((ins & 0xF0) >> 4) << " " << +(ins & 0xF) << " ";
 			switch ((ins & 0xF0) >> 4) {
+			case 0:
+				if ((ins & 0xF) == 0x7) {
+					OP_Fx07(ins, registers, delay);
+				}
 			case 1:
 				if ((ins & 0xF) == 0xE) {
 					//OP_Fx1E(ins, registers);
@@ -232,8 +236,13 @@ namespace chip8 {
 	}
 
 	/* F type instructions */
-	/*void OP_Fx1E(uint16_t operationCode, Registers& reg) {
+
+	void Instruction::OP_Fx07(uint16_t operationCode, Registers& reg, Timer& delay) {
+		reg.write((operationCode & 0xF00) >> 8, delay.read());
+	}
+
+	void Instruction::OP_Fx1E(uint16_t operationCode, Registers& reg) {
 		uint16_t result = reg.read(0xF) + reg.read((operationCode & 0xF00) >> 12);
 		reg.write(0xF, result);
-	}*/
+	}
 }

@@ -27,18 +27,10 @@ namespace chip8 {
 		uint16_t* _stack;
 		uint8_t _SP;
 
-		/* timer::Timer _delayTimer;
-		timer::Timer _soundTimer; */
+		Timer _delayTimer;
+		Timer _soundTimer;
 	private:
 	};
-
-	/*class Timer {
-	public:
-		Timer();
-
-
-		uint8_t _value;
-	};*/
 
 	class Stack {
 	public:

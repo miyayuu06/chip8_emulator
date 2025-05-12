@@ -7,8 +7,6 @@ namespace chip8 {
 		_keypad = new uint8_t[16];
 		_stack = new uint16_t[16];
 			
-		/*_delayTimer = Timer::Timer();
-		_soundTimer = Timer::Timer(); */
 
 		_PC = Chip8::PROGRAM_START;
 	}
@@ -32,7 +30,7 @@ namespace chip8 {
 		while (_PC - PROGRAM_START < programData.size()) {
 			uint16_t operationCode = _memory.read(_PC);
 			uint16_t previousPC = _PC;
-			std::cout << Instruction::decode(operationCode, _PC, _registers, _display) << " " << +_PC << std::endl;
+			std::cout << Instruction::decode(operationCode, _PC, _registers, _display, _delayTimer, _soundTimer) << " " << +_PC << std::endl;
 			
 			/* Debugging, checking registers */
 
@@ -45,11 +43,11 @@ namespace chip8 {
 			if (previousPC == _PC) {
 				_PC += 2;
 			}
-			for (int k = 0; k < 256; k++) {
+			/*for (int k = 0; k < 256; k++) {
 				if (GetAsyncKeyState(k) & 0x8000) {
 					std::cout << "Pressed!" << std::endl; break;
 				}
-			}
+			}*/
 			Sleep(167);
 		}
 	}
