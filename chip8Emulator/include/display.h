@@ -6,6 +6,7 @@ namespace chip8 {
 	public:
 		Display();
 		~Display();
+		bool read(uint8_t row, uint8_t column);
 		void write(uint8_t row, uint8_t column, bool value);
 	private:
 		std::array<std::array<bool, 32>, 64> _display;

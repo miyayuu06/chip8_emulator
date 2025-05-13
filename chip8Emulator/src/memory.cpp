@@ -11,6 +11,10 @@ namespace chip8 {
 		return (_space[address] << 8) + _space[address + 1];
 	}
 
+	uint8_t Memory::readByte(uint16_t address) {
+		return _space[address];
+	}
+
 	void Memory::write(uint16_t address, uint8_t data) {
 		_space[address] = data;
 	}

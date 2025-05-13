@@ -2,31 +2,33 @@
 #include "registers.h"
 #include "display.h"
 #include "timer.h"
+#include "stack.h"
+#include "memory.h"
 
 #include <string>
 
 namespace chip8 {
 	class Instruction {
 	public:
-		static std::string decode(uint16_t, uint16_t&, Registers&, Display&, Timer& delay, Timer& sound);
+		static std::string decode(uint16_t, uint16_t&, Registers&, Display&, Timer& delay, Timer& sound, Stack&, Memory&);
 
 		static void OP_00E0(Display& display);
-		//static void OP_00EE();
+		static void OP_00EE(uint16_t& programCounter, Stack& stack);
 
-		//// "First digit is unique" instructions
+		// "First digit is unique" instructions
 
 		static void OP_1nnn(uint16_t operationCode, uint16_t& programCounter);
-		//static void OP_2nnn();
+		static void OP_2nnn(uint16_t operationCode, uint16_t& programCounter, Stack& stack);
 		static void OP_3xkk(uint16_t operationCode, uint16_t& programCounter, Registers& registers);
 		static void OP_4xkk(uint16_t operationCode, uint16_t& programCounter, Registers& registers);
 		static void OP_5xy0(uint16_t operationCode, uint16_t& programCounter, Registers& registers);
 		static void OP_6xkk(uint16_t operationCode, Registers&);
-		//static void OP_7xkk();
+		static void OP_7xkk(uint16_t operationCode, Registers&);
 		//static void OP_9xy0();
 		static void OP_Annn(uint16_t operationCode, Registers&);
 		//static void OP_Bnnn();
 		//static void OP_Cxkk();
-		//static void OP_Dxyn();
+		static void OP_Dxyn(uint16_t operationCode, Registers&, Display&, Memory&);
 
 		// "First digit is 8" instructions
 
@@ -39,6 +41,11 @@ namespace chip8 {
 		static void OP_8xy6(uint16_t operationCode, Registers& reg);
 		static void OP_8xy7(uint16_t operationCode, Registers& reg);
 		static void OP_8xyE(uint16_t operationCode, Registers& reg);
+
+		/* E instructions */
+
+		static void OP_Ex9E(uint16_t& programCounter, Registers& reg);
+		static void OP_ExA1(uint16_t& programCounter, Registers& reg);
 
 		/* F instructions */
 

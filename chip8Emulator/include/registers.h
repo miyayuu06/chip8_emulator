@@ -11,8 +11,12 @@ namespace chip8 {
 		void write(uint8_t, uint8_t);
 		uint8_t read(uint8_t);
 
+		uint16_t iRead();
+		void iWrite(uint16_t);
+
 	private:
 		std::array<uint8_t, 16> _register;
+		uint16_t I;
 	};
 
 }

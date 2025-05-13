@@ -5,15 +5,12 @@
 namespace chip8 {
 	Chip8::Chip8() {
 		_keypad = new uint8_t[16];
-		_stack = new uint16_t[16];
-			
 
 		_PC = Chip8::PROGRAM_START;
 	}
 
 	Chip8::~Chip8() {
 		delete[] _keypad;
-		delete[] _stack;
 	}
 
 	void Chip8::load_rom(std::string path) {
@@ -29,27 +26,33 @@ namespace chip8 {
 		_memory.write(PROGRAM_START, programData.data(), programData.size());
 		while (_PC - PROGRAM_START < programData.size()) {
 			uint16_t operationCode = _memory.read(_PC);
-			uint16_t previousPC = _PC;
-			std::cout << Instruction::decode(operationCode, _PC, _registers, _display, _delayTimer, _soundTimer) << " " << +_PC << std::endl;
-			
+
+			std::cout << Instruction::decode(operationCode, _PC, _registers, _display, _delayTimer, _soundTimer, _stack, _memory) << " " << _PC << std::endl;
+			_PC += 2;
+
 			/* Debugging, checking registers */
 
 			for (int i = 0; i < 16; i++) {
 				std::cout << (i) << " " << +(_registers.read(i)) << " ";
 			}
-			std::cout  << "Finished \n";
+			std::cout << "Finished \n";
 
 			/* End of debugging */
-			if (previousPC == _PC) {
-				_PC += 2;
-			}
+
 			/*for (int k = 0; k < 256; k++) {
 				if (GetAsyncKeyState(k) & 0x8000) {
 					std::cout << "Pressed!" << std::endl; break;
 				}
 			}*/
-			Sleep(167);
 		}
 	}
-
+	void Chip8::cycle() {
+		if (_delayTimer.read()) {
+			_delayTimer.decrement();
+		}
+		if (_soundTimer.read()) {
+			_soundTimer.decrement();
+		}
+		Sleep(167);
+	}
 };

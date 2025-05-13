@@ -1,6 +1,4 @@
 #pragma once
-
-#include "memory.h"
 #include "instruction.h"
 
 #include <iostream>
@@ -17,24 +15,20 @@ namespace chip8 {
 		~Chip8();
 
 		void load_rom(std::string x);
+		void cycle();
 
 		Registers _registers;
 		Memory _memory;
 		Display _display;
+		Stack _stack;
+
 		uint8_t* _keypad;
 
 		uint16_t _PC;
-		uint16_t* _stack;
-		uint8_t _SP;
 
 		Timer _delayTimer;
 		Timer _soundTimer;
 	private:
-	};
-
-	class Stack {
-	public:
-
 	};
 
 	class Keypad {

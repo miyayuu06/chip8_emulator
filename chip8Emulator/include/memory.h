@@ -10,6 +10,7 @@ namespace chip8 {
 		Memory();
 		~Memory();
 		uint16_t read(uint16_t address);
+		uint8_t readByte(uint16_t address);
 		void write(uint16_t address, uint8_t data);
 		void write(uint32_t address, const uint8_t* data, size_t dataSizeInBytes);
 

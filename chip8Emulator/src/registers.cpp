@@ -14,4 +14,12 @@ namespace chip8 {
 	void Registers::write(uint8_t Reg, uint8_t value) {
 		_register[Reg] = value;
 	}
+
+	uint16_t Registers::iRead() {
+		return I;
+	}
+
+	void Registers::iWrite(uint16_t value) {
+		I = value;
+	}
 }
