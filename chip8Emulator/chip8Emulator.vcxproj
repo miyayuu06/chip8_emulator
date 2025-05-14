@@ -22,6 +22,7 @@
     <ClCompile Include="src\chip8.cpp" />
     <ClCompile Include="src\display.cpp" />
     <ClCompile Include="src\instruction.cpp" />
+    <ClCompile Include="src\keypad.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\memory.cpp" />
     <ClCompile Include="src\registers.cpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="include\chip8.h" />
     <ClInclude Include="include\display.h" />
     <ClInclude Include="include\instruction.h" />
+    <ClInclude Include="include\keypad.h" />
     <ClInclude Include="include\memory.h" />
     <ClInclude Include="include\registers.h" />
     <ClInclude Include="include\timer.h" />

@@ -18,6 +18,7 @@ namespace chip8 {
 		void cycle();
 		std::string decode(uint16_t);
 
+	private:
 		Registers _registers;
 		Memory _memory;
 		Display _display;
@@ -29,10 +30,5 @@ namespace chip8 {
 
 		Timer _delayTimer;
 		Timer _soundTimer;
-	private:
-	};
-
-	class Keypad {
-	public:
 	};
 }
