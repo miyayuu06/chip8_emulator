@@ -9,10 +9,11 @@ namespace chip8 {
 		Keypad();
 		~Keypad();
 		int read(char);
+		void cycleRead();
 		void write(char, bool);
+		void reset();
 
 	private:
-		std::array<std::pair<char, bool>, 16> _keyValues;
-		const std::string REFERENCE = "1234qwerasdfzxcv";
+		std::array<bool, 256> _keyValues;
 	};
 }

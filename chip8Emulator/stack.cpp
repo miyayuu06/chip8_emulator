@@ -2,7 +2,7 @@
 
 namespace chip8 {
 	Stack::Stack() {
-		_pointer = 0;
+		_pointer = -1;
 	}
 
 	Stack::~Stack() {
@@ -13,8 +13,11 @@ namespace chip8 {
 	}
 
 	uint16_t Stack::pop() {
-		_pointer--;
-		return _stack[_pointer + 1];
+		if (_pointer) {
+			_pointer--;
+			return _stack[_pointer + 1];
+		}
+		return _stack[_pointer];
 	}
 
 	void Stack:: push(uint16_t& programCounter) {

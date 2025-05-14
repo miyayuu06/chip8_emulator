@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <Windows.h>
 
 // Sólo un namespace Chip8
 
@@ -23,8 +24,7 @@ namespace chip8 {
 		Memory _memory;
 		Display _display;
 		Stack _stack;
-
-		uint8_t* _keypad;
+		Keypad _keypad;
 
 		uint16_t _PC;
 

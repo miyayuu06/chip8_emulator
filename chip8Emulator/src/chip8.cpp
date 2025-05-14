@@ -1,18 +1,14 @@
 #include "chip8.h"
 #include <filesystem>
-#include <Windows.h>
 
 #include <cassert>
 
 namespace chip8 {
 	Chip8::Chip8() {
-		_keypad = new uint8_t[16];
-
 		_PC = Chip8::PROGRAM_START;
 	}
 
 	Chip8::~Chip8() {
-		delete[] _keypad;
 	}
 
 	void Chip8::load_rom(std::string path) {
@@ -26,9 +22,19 @@ namespace chip8 {
 		rf.read((char*)programData.data(), fileSize);
 		rf.close();
 		_memory.write(PROGRAM_START, programData.data(), programData.size());
+
+		/* Clearing display and registers */
+
+		for (int i = 0; i < 16; i++) {
+			_registers.write(i, 0);
+		}
+		Instruction::OP_00E0(_display);
+
+
 		while (_PC - PROGRAM_START < programData.size()) {
 
 			/* Debugging, checking registers */
+			
 			cycle();
 			for (int i = 0; i < 16; i++) {
 				std::cout << (i) << " " << +(_registers.read(i)) << " ";
@@ -117,10 +123,11 @@ namespace chip8 {
 			break;
 		case 0xE:
 			if ((ins & 0xF) == 0xE) {
-				Instruction::OP_Ex9E(_PC, _registers);
+				Instruction::OP_Ex9E(ins, _PC, _registers, _keypad);
+				std::cout << "E";
 			}
 			else {
-				Instruction::OP_ExA1(_PC, _registers);
+				Instruction::OP_ExA1(ins, _PC, _registers, _keypad);
 			}
 		case 0xF:
 			switch ((ins & 0xF0) >> 4) {
@@ -136,7 +143,7 @@ namespace chip8 {
 				}
 			case 1:
 				if ((ins & 0xF) == 0xE) {
-					//Instruction::OP_Fx1E(ins, _registers);
+					Instruction::OP_Fx1E(ins, _registers);
 				}
 			}
 			break;
@@ -149,6 +156,7 @@ namespace chip8 {
 	}
 
 	void Chip8::cycle() {
+		_keypad.cycleRead();
 		uint16_t operationCode = _memory.read(_PC);
 
 		std::cout << decode(operationCode) << " " << _PC << std::endl;
@@ -160,6 +168,8 @@ namespace chip8 {
 		if (_soundTimer.read()) {
 			_soundTimer.decrement();
 		}
+
+		_keypad.reset();
 		Sleep(167);
 	}
 };

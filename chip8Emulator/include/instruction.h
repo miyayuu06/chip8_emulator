@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "stack.h"
 #include "memory.h"
+#include "keypad.h"
 
 #include <string>
 
@@ -25,7 +26,7 @@ namespace chip8 {
 		static void OP_7xkk(uint16_t operationCode, Registers&);
 		//static void OP_9xy0();
 		static void OP_Annn(uint16_t operationCode, Registers&);
-		//static void OP_Bnnn();
+		//static void OP_Bnnn(uint16_t operationCode, Registers&);
 		//static void OP_Cxkk();
 		static void OP_Dxyn(uint16_t operationCode, Registers&, Display&, Memory&);
 
@@ -43,8 +44,8 @@ namespace chip8 {
 
 		/* E instructions */
 
-		static void OP_Ex9E(uint16_t& programCounter, Registers& reg);
-		static void OP_ExA1(uint16_t& programCounter, Registers& reg);
+		static void OP_Ex9E(uint16_t instruction, uint16_t& programCounter, Registers& reg, Keypad& keypad);
+		static void OP_ExA1(uint16_t instruction, uint16_t& programCounter, Registers& reg, Keypad& keypad);
 
 		/* F instructions */
 

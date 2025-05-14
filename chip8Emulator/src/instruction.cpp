@@ -1,21 +1,21 @@
 #include "instruction.h"
 
 #include <iostream>
+#include <Windows.h>
 
 namespace chip8 {
 	// Instruction with unique first digit
 
 	void Instruction::OP_00E0(Display& display) {
-		for (int i = 0; i < 64; i++) {
-			for (int j = 0; j < 32; j++) {
+		for (int i = 0; i < 32; i++) {
+			for (int j = 0; j < 64; j++) {
 				display.write(i, j, false);
 			}
 		}
 	}
 
 	void Instruction::OP_00EE(uint16_t& programCounter, Stack& stack) {
-		programCounter = stack.top();
-		stack.pop();
+		programCounter = stack.pop(); 
 	}
 
 	void Instruction::OP_1nnn(uint16_t operationCode, uint16_t& programCounter) {
@@ -77,8 +77,8 @@ namespace chip8 {
 	//void Instruction::OP_Cxkk() {}
 
 	void Instruction::OP_Dxyn(uint16_t operationCode, Registers& reg, Display& display, Memory& memory) {
-		uint16_t x = reg.read((operationCode & 0xF00) >> 12) % 64;
-		uint16_t y = reg.read((operationCode & 0xF0) >> 8) % 32;
+		uint16_t x = reg.read((operationCode & 0xF00) >> 12) % 32;
+		uint16_t y = reg.read((operationCode & 0xF0) >> 8) % 64;
 		reg.write(0xF, 0);
 		uint8_t n = operationCode & 0xF;
 		uint16_t address = reg.iRead();
@@ -87,15 +87,15 @@ namespace chip8 {
 			uint8_t spriteByte = memory.readByte(address + i);
 			for (int j = 0; j < 8; j++) {
 				bool result =  spriteByte & (0x80 >> j);
-				bool displayPixel = display.read((x + i) % 64, (y + j) % 32);
+				bool displayPixel = display.read((x + i) % 32, (y + j) % 64);
 				if (result) {
 					reg.write(0xF, 1);
 				}
-				display.write((x + i) % 64, (y + j) % 32, result ^ displayPixel);
+				display.write((x + i) % 32, (y + j) % 64, result ^ displayPixel);
 			}
 		}
-		for (int i = 0; i < 64; i++) {
-			for (int j = 0; j < 32; j++) {
+		for (int i = 0; i < 32; i++) {
+			for (int j = 0; j < 64; j++) {
 				std::cout << display.read(i, j);
 			}
 			std::cout << std::endl;
@@ -179,12 +179,18 @@ namespace chip8 {
 
 	/* E type instructions */
 
-	void Instruction::OP_Ex9E(uint16_t& programCounter, Registers& reg) {
-
+	void Instruction::OP_Ex9E(uint16_t ins, uint16_t& programCounter, Registers& reg, Keypad& keypad) {
+		uint16_t key = reg.read((ins & 0xF00) >> 8);
+		if (keypad.read(key)) {
+			programCounter += 2;
+		}
 	}
 
-	void Instruction::OP_ExA1(uint16_t& programCounter, Registers& reg) {
-
+	void Instruction::OP_ExA1(uint16_t ins, uint16_t& programCounter, Registers& reg, Keypad& keypad) {
+		uint16_t key = reg.read((ins & 0xF00) >> 8);
+		if (!keypad.read(key)) {
+			programCounter += 2;
+		}
 	}
 
 	/* F type instructions */
@@ -194,7 +200,7 @@ namespace chip8 {
 	}
 
 	void Instruction::OP_Fx1E(uint16_t operationCode, Registers& reg) {
-		uint16_t result = reg.iRead() + reg.read((operationCode & 0xF00) >> 12);
+		uint16_t result = reg.iRead() + reg.read((operationCode & 0xF00) >> 8);
 		reg.iWrite(result);
 	}
 }

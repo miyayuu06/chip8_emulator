@@ -1,31 +1,45 @@
 #include "keypad.h"
+#include <Windows.h>
 
 namespace chip8 {
 
 	Keypad::Keypad() {
-		for (int i = 0; i < 16; i++) {
-			write(REFERENCE[i], false);
-		}
+		reset();
 	}
 	
 	Keypad::~Keypad() {
 	}
 
 	int Keypad::read(char character) {
-		for (std::pair key : _keyValues) {
-			if (key.first == character) {
-				return key.second ? 1 : 0;
+		for (int i = 0; i < 256; i++) {
+			if (i == character) {
+				return _keyValues[i];
 			}
 		}
 		return -1;
 	}
 
+	void Keypad::cycleRead() {
+		for (int i = 0; i < 256; i++) {
+			if (GetAsyncKeyState(i) & 0x8000) {
+				write(i, true);
+			}
+		}
+	}
+
 	void Keypad::write(char character, bool value) {
-		for (int i = 0; i < 16; i++) {
-			if (_keyValues[i].first == character) {
-				_keyValues[i].second = value; 
+		for (int i = 0; i < 256; i++) {
+			if (i == character) {
+				_keyValues[i] = value; 
 				return;
 			}
+		
+		}
+	}
+
+	void Keypad::reset() {
+		for (int i = 0; i < 256; i++) {
+			_keyValues[i] = false;
 		}
 	}
 }
