@@ -10,8 +10,7 @@
 namespace chip8 {
 	class Instruction {
 	public:
-		static std::string decode(uint16_t, uint16_t&, Registers&, Display&, Timer& delay, Timer& sound, Stack&, Memory&);
-
+		
 		static void OP_00E0(Display& display);
 		static void OP_00EE(uint16_t& programCounter, Stack& stack);
 
@@ -50,10 +49,10 @@ namespace chip8 {
 		/* F instructions */
 
 		static void OP_Fx07(uint16_t operationCode, Registers& reg, Timer& delay);
-		static void OP_Fx0A();
+		/*static void OP_Fx0A();
 		static void OP_Fx15();
-		static void OP_Fx18();
+		static void OP_Fx18();*/
 		static void OP_Fx1E(uint16_t operationCode, Registers& reg);
-		static void OP_Fx29();
+		/*static void OP_Fx29();*/
 	};
 }

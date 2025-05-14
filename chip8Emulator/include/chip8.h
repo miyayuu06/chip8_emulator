@@ -16,6 +16,7 @@ namespace chip8 {
 
 		void load_rom(std::string x);
 		void cycle();
+		std::string decode(uint16_t);
 
 		Registers _registers;
 		Memory _memory;
