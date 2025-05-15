@@ -74,11 +74,13 @@ namespace chip8 {
 
 	//void Instruction::OP_Bnnn() {}
 
-	//void Instruction::OP_Cxkk() {}
+	void Instruction::OP_Cxkk(uint16_t operationCode, Registers&) {
+		uint16_t result = (operationCode & 0xFF) & (std::rand() % 256);
+	}
 
 	void Instruction::OP_Dxyn(uint16_t operationCode, Registers& reg, Display& display, Memory& memory) {
-		uint16_t x = reg.read((operationCode & 0xF00) >> 12) % 32;
-		uint16_t y = reg.read((operationCode & 0xF0) >> 8) % 64;
+		uint16_t x = reg.read((operationCode & 0xF00) >> 8) % 32;
+		uint16_t y = reg.read((operationCode & 0xF0) >> 4) % 64;
 		reg.write(0xF, 0);
 		uint8_t n = operationCode & 0xF;
 		uint16_t address = reg.iRead();
@@ -86,6 +88,7 @@ namespace chip8 {
 		for (int i = 0; i < n; i++) {
 			uint8_t spriteByte = memory.readByte(address + i);
 			for (int j = 0; j < 8; j++) {
+				std::cout << (x + i) << " " << (y + j) << std::endl;
 				bool result =  spriteByte & (0x80 >> j);
 				bool displayPixel = display.read((x + i) % 32, (y + j) % 64);
 				if (result) {

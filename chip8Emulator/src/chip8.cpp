@@ -118,6 +118,9 @@ namespace chip8 {
 		case 0xA:
 			Instruction::OP_Annn(ins, _registers);
 			break;
+		case 0xC:
+			Instruction::OP_Cxkk(ins, _registers);
+			break;
 		case 0xD:
 			Instruction::OP_Dxyn(ins, _registers, _display, _memory);
 			break;
