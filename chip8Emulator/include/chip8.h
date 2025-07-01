@@ -15,8 +15,10 @@ namespace chip8 {
 		Chip8();
 		~Chip8();
 
-		void load_rom(std::string x);
+		int load_rom(std::string x);
 		void cycle();
+		void program(int programData);
+
 		std::string decode(uint16_t);
 
 	private:

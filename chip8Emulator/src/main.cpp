@@ -10,7 +10,10 @@ using namespace chip8;
 int main()
 {
     Chip8 chip8;
-    chip8.load_rom("C:/Users/yunaf/Desktop/wonkypong.ch8");
+    //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/wonkypong.ch8");
+    int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/3-corax+.ch8");
+    chip8.program(programDataSize);
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

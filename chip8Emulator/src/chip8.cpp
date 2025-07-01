@@ -11,11 +11,11 @@ namespace chip8 {
 	Chip8::~Chip8() {
 	}
 
-	void Chip8::load_rom(std::string path) {
-		std::ifstream rf(path, std::ios::out | std::ios::binary);
+	int Chip8::load_rom(std::string path) {
+		std::ifstream rf(path, std::ios::in | std::ios::binary);
 		if (!rf) {
 			std::cout << "Can not access file, sowwy!" << std::endl;
-			return;
+			return 0;
 		}
 		int fileSize = std::filesystem::file_size(path);
 		std::vector<uint8_t> programData(fileSize);
@@ -29,17 +29,31 @@ namespace chip8 {
 			_registers.write(i, 0);
 		}
 		Instruction::OP_00E0(_display);
+		return programData.size();
+	}
 
-
-		while (_PC - PROGRAM_START < programData.size()) {
+	void Chip8::program(int programDataSize) {
+		_PC = PROGRAM_START;
+		while (_PC - PROGRAM_START < programDataSize) {
 
 			/* Debugging, checking registers */
-			
+
 			cycle();
+
+
+			/*for (int i = 0; i < 32; i++) {
+				for (int j = 0; j < 64; j++) {
+					std::cout << _display.read(i, j);
+				}
+				std::cout << std::endl;
+			}*/
+			//Sleep(100);
+			std::cout << _PC << std::endl;
 			for (int i = 0; i < 16; i++) {
-				std::cout << (i) << " " << +(_registers.read(i)) << " ";
+				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
 			}
-			std::cout << "Finished \n";
+			std::cout << "I " << _registers.iRead() << std::endl;
+			std::cout << std::endl;
 
 			/* End of debugging */
 
@@ -61,14 +75,17 @@ namespace chip8 {
 			case 0:
 				if (ins & 0xF) {
 					Instruction::OP_00EE(_PC, _stack);
+					return "YES";
 				}
 				else {
 					Instruction::OP_00E0(_display);
 				}
 				break;
 			default:
+				
 				std::cout << "SYS addr" << std::endl;
-				assert(0);
+				break;
+				//assert(0);
 			}
 			break;
 		case 1:
@@ -97,24 +114,41 @@ namespace chip8 {
 			case 0:
 				Instruction::OP_8xy0(ins, _registers);
 				break;
+			case 1:
+				Instruction::OP_8xy1(ins, _registers);
+				break;
+			case 2:
+				Instruction::OP_8xy2(ins, _registers);
+				break;
+			case 3:
+				Instruction::OP_8xy3(ins, _registers);
+				break;
 			case 4:
 				Instruction::OP_8xy4(ins, _registers);
 				break;
 			case 5:
 				Instruction::OP_8xy5(ins, _registers);
 				break;
+			case 6:
+				Instruction::OP_8xy6(ins, _registers);
+				break;
 			case 7:
 				Instruction::OP_8xy7(ins, _registers);
 				break;
+			case 0xE:
+				Instruction::OP_8xyE(ins, _registers);
+				break;
 			default:
-				std::cout << std::endl << 8 << " " << +(ins & 0xF) << std::endl;
-				assert(0);
+				assert(8);
 				break;
 			}
 			break;
 			/*case 9:
 				type = "CPU stuff";
 				break;*/
+		case 9:
+			Instruction::OP_9xy0(ins, _PC, _registers);
+			break;
 		case 0xA:
 			Instruction::OP_Annn(ins, _registers);
 			break;
@@ -139,20 +173,32 @@ namespace chip8 {
 					Instruction::OP_Fx07(ins, _registers, _delayTimer);
 				}
 				else if ((ins & 0xF) == 0xA) {
-
+					Instruction::OP_Fx0A(ins, _PC, _registers, _keypad);
 				}
 				else {
-					assert(0);
+					assert(150);
 				}
+				break;
 			case 1:
 				if ((ins & 0xF) == 0xE) {
 					Instruction::OP_Fx1E(ins, _registers);
+					break;
 				}
+			case 3:
+				Instruction::OP_Fx33(ins, _registers, _memory);
+				break;
+			case 5:
+				Instruction::OP_Fx55(ins, _registers, _memory);
+				break;
+			case 0x6:
+				Instruction::OP_Fx65(ins, _registers, _memory);
+				break;
+			default:
+				assert(15);
 			}
-			break;
 		default:
-			std::cout << std::endl << insType << std::endl;
-			assert(0);
+			std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
+			assert(insType);
 			break;
 		}
 		return type;
@@ -161,8 +207,9 @@ namespace chip8 {
 	void Chip8::cycle() {
 		_keypad.cycleRead();
 		uint16_t operationCode = _memory.read(_PC);
+		std::string decodification = decode(operationCode);
+		//std::cout << decodification << " " << _PC << std::endl;
 
-		std::cout << decode(operationCode) << " " << _PC << std::endl;
 		_PC += 2;
 
 		if (_delayTimer.read()) {
@@ -173,6 +220,5 @@ namespace chip8 {
 		}
 
 		_keypad.reset();
-		Sleep(167);
 	}
 };
