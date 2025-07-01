@@ -235,17 +235,16 @@ namespace chip8 {
 	void Instruction::OP_Fx33(uint16_t operationCode, Registers& reg, Memory& mem) {
 		uint8_t Vx = reg.read((operationCode & 0xF00) >> 8);
 		uint16_t address = reg.iRead();
-		for (uint8_t i = 0; i < 3; ++i) {
-			mem.write(address + i, Vx & 0x1);
-			Vx >= 1;
-		}
+		mem.write(address + 2, Vx % 10); Vx /= 10;
+		mem.write(address + 1, Vx % 10); Vx /= 10;
+		mem.write(address, Vx % 10);
 	}
 
 	void Instruction::OP_Fx55(uint16_t operationCode, Registers& reg, Memory& mem) {
 		uint16_t address = reg.iRead();
 		uint8_t x = (operationCode & 0xF00) >> 8;
 		for (uint8_t i = 0; i <= x; ++i) {
-			mem.write(address + i, reg.read(x));
+			mem.write(address + i, reg.read(i));
 		}
 	}
 

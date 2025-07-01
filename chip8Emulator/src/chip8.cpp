@@ -29,17 +29,18 @@ namespace chip8 {
 			_registers.write(i, 0);
 		}
 		Instruction::OP_00E0(_display);
+		_registers.iWrite(0);
 		return programData.size();
 	}
 
 	void Chip8::program(int programDataSize) {
 		_PC = PROGRAM_START;
-		while (_PC - PROGRAM_START < programDataSize) {
-
+		int quit = 0;
+		while (!quit/*_PC - PROGRAM_START < programDataSize*/) {
 			/* Debugging, checking registers */
 
 			cycle();
-
+			Sleep(150);
 
 			/*for (int i = 0; i < 32; i++) {
 				for (int j = 0; j < 64; j++) {
@@ -48,12 +49,14 @@ namespace chip8 {
 				std::cout << std::endl;
 			}*/
 			//Sleep(100);
-			std::cout << _PC << std::endl;
+			/*std::cout << _PC << std::endl;
 			for (int i = 0; i < 16; i++) {
 				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
 			}
 			std::cout << "I " << _registers.iRead() << std::endl;
-			std::cout << std::endl;
+			std::cout << std::endl;*/
+
+			quit = GetAsyncKeyState(32);
 
 			/* End of debugging */
 
@@ -68,17 +71,17 @@ namespace chip8 {
 	std::string Chip8::decode(uint16_t ins) {
 		int insType = ins >> 12;
 		std::string type = "";
-		std::cout << ((ins & 0xF000) >> 12) << " " << ((ins & 0xF00) >> 8) << " " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << std::endl;
+		//std::cout << ((ins & 0xF000) >> 12) << " " << ((ins & 0xF00) >> 8) << " " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << std::endl;
 		switch (insType) {
 		case 0:
 			switch (ins & 0xF00) {
 			case 0:
 				if (ins & 0xF) {
 					Instruction::OP_00EE(_PC, _stack);
-					return "YES";
 				}
 				else {
 					Instruction::OP_00E0(_display);
+					return "YES";
 				}
 				break;
 			default:
@@ -142,10 +145,6 @@ namespace chip8 {
 				assert(8);
 				break;
 			}
-			break;
-			/*case 9:
-				type = "CPU stuff";
-				break;*/
 		case 9:
 			Instruction::OP_9xy0(ins, _PC, _registers);
 			break;
@@ -207,10 +206,9 @@ namespace chip8 {
 	void Chip8::cycle() {
 		_keypad.cycleRead();
 		uint16_t operationCode = _memory.read(_PC);
-		std::string decodification = decode(operationCode);
-		//std::cout << decodification << " " << _PC << std::endl;
-
 		_PC += 2;
+
+		std::string decodification = decode(operationCode);
 
 		if (_delayTimer.read()) {
 			_delayTimer.decrement();

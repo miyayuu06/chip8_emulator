@@ -35,10 +35,13 @@
     <ClCompile Include="src\timer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="stack.cpp">
+    <ClCompile Include="src\keypad.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\keypad.cpp">
+    <ClCompile Include="src\stack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="include\src\graphics.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -61,10 +64,13 @@
     <ClInclude Include="include\timer.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="stack.h">
+    <ClInclude Include="include\keypad.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\keypad.h">
+    <ClInclude Include="include\stack.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\graphics.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

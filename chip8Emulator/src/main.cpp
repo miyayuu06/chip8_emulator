@@ -10,8 +10,10 @@ using namespace chip8;
 int main()
 {
     Chip8 chip8;
-    //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/wonkypong.ch8");
-    int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/3-corax+.ch8");
+    //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/Tetris.ch8");
+    int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/1-chip8-logo.ch8");
+    //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/3-corax+.ch8");
+    //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/test_opcode.ch8");
     chip8.program(programDataSize);
 
 }
