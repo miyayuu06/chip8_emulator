@@ -2,6 +2,9 @@
 
 namespace chip8 {
 	Registers::Registers() {
+		/*for (int i = 0; i < 16; i++) {
+			_register[i] = 0;
+		}*/
 	}
 
 	Registers::~Registers() {

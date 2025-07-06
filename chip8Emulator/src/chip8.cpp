@@ -40,8 +40,9 @@ namespace chip8 {
 		while (!quit/*_PC - PROGRAM_START < programDataSize*/) {
 			/* Debugging, checking registers */
 
+			std::cout << _PC << ", instruccion: ";
 			cycle();
-			Sleep(1000/60);
+			//Sleep(1000/60);
 
 			/*for (int i = 0; i < 32; i++) {
 				for (int j = 0; j < 64; j++) {
@@ -50,12 +51,11 @@ namespace chip8 {
 				std::cout << std::endl;
 			}*/
 			//Sleep(100);
-			/*std::cout << _PC << std::endl;
 			for (int i = 0; i < 16; i++) {
 				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
 			}
 			std::cout << "I " << _registers.iRead() << std::endl;
-			std::cout << std::endl;*/
+			std::cout << std::endl << std::endl;
 
 			quit = GetAsyncKeyState(32);
 

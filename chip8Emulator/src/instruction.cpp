@@ -54,7 +54,7 @@ namespace chip8 {
 
 	void Instruction::OP_7xkk(uint16_t operationCode, Registers& registers) {
 		uint8_t Vx = (operationCode & 0xF00) >> 8u;
-		uint8_t result = registers.read(Vx) + (operationCode & 0xFF);
+		uint8_t result = (registers.read(Vx) + (operationCode & 0xFF)) & 0xFF;
 
 		registers.write(Vx, result);
 	}
@@ -152,11 +152,14 @@ namespace chip8 {
 	}
 
 	void Instruction::OP_8xy5(uint16_t operationCode, Registers& reg) {
-		uint8_t Vx = (operationCode & 0xF00u) >> 8;
-		uint8_t Vy = (operationCode & 0xF0u) >> 4;
-		uint8_t result = reg.read(Vx) - reg.read(Vy);
-		reg.write(0xF, result > 0);
-		reg.write(Vx, result);
+		uint8_t Vx = reg.read((operationCode & 0xF00u) >> 8);
+		uint8_t Vy = reg.read((operationCode & 0xF0u) >> 4);
+		if (Vx > Vy) {
+			reg.write(0xF, 1);
+			reg.write((operationCode & 0xF00u) >> 8, Vx - Vy);
+			return;
+		}
+		reg.write(0xF, 0);
 	}
 
 	void Instruction::OP_8xy6(uint16_t operationCode, Registers& reg) {
@@ -180,9 +183,10 @@ namespace chip8 {
 	void Instruction::OP_8xyE(uint16_t operationCode, Registers& reg) {
 		uint8_t Vx = (operationCode & 0xF00) >> 8;
 		uint8_t aux = reg.read(Vx);
+		uint8_t result = aux << 1;
 			
 		reg.write(0xF, (aux & 0x80) >> 7);
-		reg.write(Vx, aux << 1);
+		reg.write(Vx, result);
 	}
 
 	/* E type instructions */
