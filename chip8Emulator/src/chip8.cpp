@@ -186,6 +186,13 @@ namespace chip8 {
 					Instruction::OP_Fx1E(ins, _registers);
 					break;
 				}
+				else {
+					Instruction::OP_Fx18(ins, _registers, _soundTimer);
+					break;
+				}
+			case 2:
+				Instruction::OP_Fx29(ins, _registers, _memory);
+				break;
 			case 3:
 				Instruction::OP_Fx33(ins, _registers, _memory);
 				break;
@@ -199,7 +206,7 @@ namespace chip8 {
 				assert(15);
 			}
 		default:
-			//std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
+			std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
 			assert(insType);
 			break;
 		}

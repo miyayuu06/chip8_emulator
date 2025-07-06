@@ -52,9 +52,9 @@ namespace chip8 {
 		static void OP_Fx07(uint16_t operationCode, Registers& reg, Timer& delay);
 		static void OP_Fx0A(uint16_t operationCode, uint16_t& programCounter, Registers& reg, Keypad& keypad);
 		static void OP_Fx15(uint16_t operationCode, Registers& reg, Timer& delay);
-		static void OP_Fx18();
+		static void OP_Fx18(uint16_t operationCode, Registers& reg, Timer& sound);
 		static void OP_Fx1E(uint16_t operationCode, Registers& reg);
-		static void OP_Fx29();
+		static void OP_Fx29(uint16_t operationCode, Registers& reg, Memory& mem);
 		static void OP_Fx33(uint16_t operationCode, Registers& reg, Memory& mem);
 		static void OP_Fx55(uint16_t operationCode, Registers& reg, Memory& mem);
 		static void OP_Fx65(uint16_t operationCode, Registers& reg, Memory& mem);

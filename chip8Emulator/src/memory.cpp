@@ -2,6 +2,9 @@
 
 namespace chip8 {
 	Memory::Memory() {
+		// Digits must be stored in the interpreter area of Chip-8, which starts at 0x00
+		// We introduce 0-9 and A-F
+		std::memcpy(&_space[0x050], &_FONTSET, 80);
 	}
 
 	Memory::~Memory() {

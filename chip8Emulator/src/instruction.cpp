@@ -226,20 +226,28 @@ namespace chip8 {
 	}
 
 	void Instruction::OP_Fx15(uint16_t operationCode, Registers& reg, Timer& delay) {
-		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		uint8_t Vx = (operationCode & 0xF00u) >> 8;
 		delay.set(reg.read(Vx));
 	}
 
+	void Instruction::OP_Fx18(uint16_t operationCode, Registers& reg, Timer& sound) {
+		uint8_t Vx = (operationCode & 0xF00) >> 8;
+		sound.set(reg.read(Vx));
+	}
+
 	void Instruction::OP_Fx1E(uint16_t operationCode, Registers& reg) {
-		uint16_t result = reg.iRead() + reg.read((operationCode & 0xF00) >> 8);
+		uint16_t result = reg.iRead() + reg.read((operationCode & 0xF00u) >> 8);
 		reg.iWrite(result);
 	}
 
-	/*void Instruction::OP_Fx29();*/
+	void Instruction::OP_Fx29(uint16_t operationCode, Registers& reg, Memory& mem) {
+		uint8_t digit = reg.read((operationCode & 0xF00u) >> 8);
+		reg.iWrite(0x050 + 5 * digit);
+	}
 
 
 	void Instruction::OP_Fx33(uint16_t operationCode, Registers& reg, Memory& mem) {
-		uint8_t Vx = reg.read((operationCode & 0xF00) >> 8);
+		uint8_t Vx = reg.read((operationCode & 0xF00u) >> 8);
 		uint16_t address = reg.iRead();
 		mem.write(address + 2, Vx % 10); Vx /= 10;
 		mem.write(address + 1, Vx % 10); Vx /= 10;
