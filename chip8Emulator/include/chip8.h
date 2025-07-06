@@ -1,5 +1,6 @@
 #pragma once
 #include "instruction.h"
+#include "graphics.h"
 
 #include <iostream>
 #include <vector>
@@ -32,5 +33,7 @@ namespace chip8 {
 
 		Timer _delayTimer;
 		Timer _soundTimer;
+
+		Graphics _graphics;
 	};
 }

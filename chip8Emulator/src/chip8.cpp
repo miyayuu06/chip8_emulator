@@ -30,6 +30,7 @@ namespace chip8 {
 		}
 		Instruction::OP_00E0(_display);
 		_registers.iWrite(0);
+
 		return programData.size();
 	}
 
@@ -40,7 +41,7 @@ namespace chip8 {
 			/* Debugging, checking registers */
 
 			cycle();
-			Sleep(150);
+			Sleep(1000/60);
 
 			/*for (int i = 0; i < 32; i++) {
 				for (int j = 0; j < 64; j++) {
@@ -66,12 +67,14 @@ namespace chip8 {
 				}
 			}*/
 		}
+
+
 	}
 
 	std::string Chip8::decode(uint16_t ins) {
 		int insType = ins >> 12;
 		std::string type = "";
-		//std::cout << ((ins & 0xF000) >> 12) << " " << ((ins & 0xF00) >> 8) << " " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << std::endl;
+		std::cout << ((ins & 0xF000) >> 12) << " " << ((ins & 0xF00) >> 8) << " " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << std::endl;
 		switch (insType) {
 		case 0:
 			switch (ins & 0xF00) {
@@ -160,11 +163,11 @@ namespace chip8 {
 		case 0xE:
 			if ((ins & 0xF) == 0xE) {
 				Instruction::OP_Ex9E(ins, _PC, _registers, _keypad);
-				std::cout << "E";
 			}
 			else {
 				Instruction::OP_ExA1(ins, _PC, _registers, _keypad);
 			}
+			break;
 		case 0xF:
 			switch ((ins & 0xF0) >> 4) {
 			case 0:
@@ -196,7 +199,7 @@ namespace chip8 {
 				assert(15);
 			}
 		default:
-			std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
+			//std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
 			assert(insType);
 			break;
 		}
@@ -209,6 +212,8 @@ namespace chip8 {
 		_PC += 2;
 
 		std::string decodification = decode(operationCode);
+		
+		_graphics.draw(_display);
 
 		if (_delayTimer.read()) {
 			_delayTimer.decrement();
