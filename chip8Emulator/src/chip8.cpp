@@ -40,11 +40,11 @@ namespace chip8 {
 		while (!quit/*_PC - PROGRAM_START < programDataSize*/) {
 			/* Debugging, checking registers */
 
-			_keypad.cycleRead();
-			//quit = _graphics.update(_keypad);
+			//_keypad.cycleRead();
+			quit = _graphics.update(_keypad);
 			//std::cout << _PC << ", instruccion: ";
 			cycle();
-			//Sleep(1000/60);
+			Sleep(100/60);
 
 			/*for (int i = 0; i < 32; i++) {
 				for (int j = 0; j < 64; j++) {
@@ -59,11 +59,6 @@ namespace chip8 {
 			std::cout << "I " << _registers.iRead() << std::endl;
 			std::cout << std::endl << std::endl;*/
 
-			for (int i = 0; i < 16; i++) {
-				std::cout << _keypad.read(i) << " | ";
-			}
-			std::cout << std::endl << std::endl;
-
 			quit = GetAsyncKeyState(32);
 
 			/* End of debugging */
@@ -76,7 +71,7 @@ namespace chip8 {
 	std::string Chip8::decode(uint16_t ins) {
 		int insType = ins >> 12;
 		std::string type = "";
-		std::cout << ((ins & 0xF000) >> 12) << " " << ((ins & 0xF00) >> 8) << " " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << std::endl;
+		//std::cout << ((ins & 0xF000) >> 12) << " " << ((ins & 0xF00) >> 8) << " " << ((ins & 0xF0) >> 4) << " " << (ins & 0xF) << std::endl;
 		switch (insType) {
 		case 0:
 			switch (ins & 0xF00) {

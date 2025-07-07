@@ -25,13 +25,9 @@ namespace chip8 {
 		}
 	}
 
-	void Keypad::write(char character, bool value) {
-		for (int i = 0; i < 16; i++) {
-			if (_KEYREFERENCE[i] == character) {
-				_keyValues[i] = value; 
-				return;
-			}
-
+	void Keypad::write(uint8_t character, bool value) {
+		if (character < 16) {
+			_keyValues[character] = value;
 		}
 	}
 

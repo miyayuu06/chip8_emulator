@@ -10,7 +10,7 @@ namespace chip8 {
 		~Keypad();
 		int read(char);
 		void cycleRead();
-		void write(char, bool);
+		void write(uint8_t, bool);
 		void reset();
 
 	private:
