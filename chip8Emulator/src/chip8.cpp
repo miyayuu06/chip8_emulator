@@ -40,7 +40,8 @@ namespace chip8 {
 		while (!quit/*_PC - PROGRAM_START < programDataSize*/) {
 			/* Debugging, checking registers */
 
-			_keypad.reset();
+			_keypad.cycleRead();
+			//quit = _graphics.update(_keypad);
 			//std::cout << _PC << ", instruccion: ";
 			cycle();
 			//Sleep(1000/60);
@@ -51,7 +52,7 @@ namespace chip8 {
 				}
 				std::cout << std::endl;
 			}*/
-			//Sleep(100);
+
 			/*for (int i = 0; i < 16; i++) {
 				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
 			}
@@ -67,11 +68,6 @@ namespace chip8 {
 
 			/* End of debugging */
 
-			/*for (int k = 0; k < 256; k++) {
-				if (GetAsyncKeyState(k) & 0x8000) {
-					std::cout << "Pressed!" << std::endl; break;
-				}
-			}*/
 		}
 
 
@@ -223,7 +219,6 @@ namespace chip8 {
 	}
 
 	void Chip8::cycle() {
-		_keypad.cycleRead();
 		uint16_t operationCode = _memory.read(_PC);
 		_PC += 2;
 

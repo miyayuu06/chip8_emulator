@@ -31,3 +31,30 @@ void Graphics::draw(Display display) {
 
 	SDL_RenderPresent(renderer);
 }
+
+bool Graphics::update(Keypad& keypad) {
+	bool quit = false;
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch (event.type) {
+		case SDL_EVENT_KEY_DOWN:
+			for (int i = 0; i < 16; i++) {
+				if (event.key.key == _KEYMAPPING[i]) {
+					keypad.write(i, false);
+				}
+			} 
+			break;
+		case SDL_EVENT_KEY_UP:
+			for (int i = 0; i < 16; i++) {
+				if (event.key.key == _KEYMAPPING[i]) {
+					keypad.write(i, true);
+				}
+			}
+			break;
+		case SDL_EVENT_QUIT:
+			quit = true;
+			break;
+		}
+	}
+	return quit;
+}
