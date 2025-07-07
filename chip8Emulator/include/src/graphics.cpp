@@ -36,7 +36,6 @@ bool Graphics::update(Keypad& keypad) {
 	bool quit = false;
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		std::cout << event.type << std::endl;
 		switch (event.type) {
 		case SDL_EVENT_KEY_DOWN:
 			for (int i = 0; i < 16; i++) {

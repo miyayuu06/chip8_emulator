@@ -37,14 +37,14 @@ namespace chip8 {
 	void Chip8::program(int programDataSize) {
 		_PC = PROGRAM_START;
 		int quit = 0;
-		while (!quit/*_PC - PROGRAM_START < programDataSize*/) {
+		while (!quit) {
 			/* Debugging, checking registers */
 
-			//_keypad.cycleRead();
 			quit = _graphics.update(_keypad);
+			_graphics.draw(_display);
 			//std::cout << _PC << ", instruccion: ";
 			cycle();
-			Sleep(100/60);
+			Sleep(1000/60);
 
 			/*for (int i = 0; i < 32; i++) {
 				for (int j = 0; j < 64; j++) {
@@ -58,8 +58,6 @@ namespace chip8 {
 			}
 			std::cout << "I " << _registers.iRead() << std::endl;
 			std::cout << std::endl << std::endl;*/
-
-			quit = GetAsyncKeyState(32);
 
 			/* End of debugging */
 
@@ -214,12 +212,12 @@ namespace chip8 {
 	}
 
 	void Chip8::cycle() {
-		uint16_t operationCode = _memory.read(_PC);
-		_PC += 2;
+		for (int i = 0; i < 5; i++) {
+			uint16_t operationCode = _memory.read(_PC);
+			_PC += 2;
 
-		std::string decodification = decode(operationCode);
-		
-		_graphics.draw(_display);
+			std::string decodification = decode(operationCode);
+		}
 
 		if (_delayTimer.read() > 0) {
 			_delayTimer.decrement();

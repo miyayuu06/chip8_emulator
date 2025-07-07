@@ -16,7 +16,7 @@ namespace chip8 {
 
 	void Registers::write(uint8_t Reg, uint8_t value) {
 		if (Reg < 16) {
-			_register[Reg] = (uint8_t) value;
+			_register[Reg] = value;
 		}
 	}
 

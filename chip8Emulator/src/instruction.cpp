@@ -144,7 +144,7 @@ namespace chip8 {
 		uint8_t Vx = getVx(operationCode);
 		uint8_t Vy = getVy(operationCode);
 
-		reg.write(Vx, (uint8_t)(reg.read(Vx) ^ reg.read(Vy)));
+		reg.write(Vx, (uint8_t) (reg.read(Vx) ^ reg.read(Vy)));
 	}
 
 	void Instruction::OP_8xy4(uint16_t operationCode, Registers& reg) {
@@ -152,8 +152,13 @@ namespace chip8 {
 		uint8_t Vy = getVy(operationCode);
 		uint16_t result = reg.read(Vx) + reg.read(Vy);
 
-		reg.write(Vx, (uint8_t) (result & 0xFFu));
-		reg.write(0xF, (uint8_t) (result > 0xFF));
+		reg.write(Vx, (uint8_t) result);
+		if (result > 0xFFu) {
+			reg.write(0xF, 1);
+		}
+		else {
+			reg.write(0xF, 0);
+		}
 
 	}
 
@@ -162,16 +167,16 @@ namespace chip8 {
 		uint8_t Vx = reg.read(x);
 		uint8_t Vy = reg.read(getVy(operationCode));
 		
+		reg.write(0xF, (uint8_t) (Vx > Vy));
 		reg.write(x, (uint8_t) (Vx - Vy));
-		reg.write(0xF, (uint8_t) (Vx >= Vy));
 	}
 
 	void Instruction::OP_8xy6(uint16_t operationCode, Registers& reg) {
 		uint8_t Vx = getVx(operationCode);
 		uint8_t aux = reg.read(Vx);
 
-		reg.write(Vx, (uint8_t) (aux >> 1));
 		reg.write(0xF, (uint8_t)(aux & 1));
+		reg.write(Vx, (uint8_t) (aux >> 1));
 	}
 
 	void Instruction::OP_8xy7(uint16_t operationCode, Registers& reg) {
@@ -179,8 +184,8 @@ namespace chip8 {
 		uint8_t Vx = reg.read(x);
 		uint8_t Vy = reg.read(getVy(operationCode));
 
+		reg.write(0xF, (uint8_t) (Vy > Vx));
 		reg.write(x, (uint8_t) (Vy - Vx));
-		reg.write(0xF, (uint8_t) (Vy >= Vx));
 	}
 
 	void Instruction::OP_8xyE(uint16_t operationCode, Registers& reg) {
@@ -188,21 +193,21 @@ namespace chip8 {
 		uint8_t aux = reg.read(Vx);
 		uint8_t result = aux << 1;
 			
-		reg.write(Vx, result);
 		reg.write(0xF, (uint8_t) ((aux & 0x80) >> 7));
+		reg.write(Vx, result);
 	}
 
 	/* E type instructions */
 
 	void Instruction::OP_Ex9E(uint16_t operationCode, uint16_t& programCounter, Registers& reg, Keypad& keypad) {
-		uint16_t key = reg.read(getVx(operationCode));
+		uint8_t key = reg.read(getVx(operationCode));
 		if (keypad.read(key)) {
 			programCounter += 2;
 		}
 	}
 
 	void Instruction::OP_ExA1(uint16_t operationCode, uint16_t& programCounter, Registers& reg, Keypad& keypad) {
-		uint16_t key = reg.read(getVx(operationCode));
+		uint8_t key = reg.read(getVx(operationCode));
 		if (!keypad.read(key)) {
 			programCounter += 2;
 		}
@@ -258,7 +263,7 @@ namespace chip8 {
 		uint16_t address = reg.iRead();
 		mem.write(address + 2, Vx % 10); Vx /= 10;
 		mem.write(address + 1, Vx % 10); Vx /= 10;
-		mem.write(address, Vx % 10);
+		mem.write(address, Vx);
 	}
 
 	void Instruction::OP_Fx55(uint16_t operationCode, Registers& reg, Memory& mem) {
