@@ -11,11 +11,13 @@ namespace chip8 {
 	}
 
 	uint8_t Registers::read(uint8_t Reg) {
-		return _register[Reg];
+		return (Reg < 16) ? _register[Reg] : 0;
 	}
 
 	void Registers::write(uint8_t Reg, uint8_t value) {
-		_register[Reg] = value;
+		if (Reg < 16) {
+			_register[Reg] = value;
+		}
 	}
 
 	uint16_t Registers::iRead() {

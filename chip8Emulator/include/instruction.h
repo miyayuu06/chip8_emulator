@@ -12,6 +12,10 @@ namespace chip8 {
 	class Instruction {
 	public:
 		
+		// Special operations for operating on Vx and Vy
+		static uint8_t getVx(uint16_t& operationCode);
+		static uint8_t getVy(uint16_t& operationCode);
+
 		static void OP_00E0(Display& display);
 		static void OP_00EE(uint16_t& programCounter, Stack& stack);
 
@@ -26,7 +30,7 @@ namespace chip8 {
 		static void OP_7xkk(uint16_t operationCode, Registers&);
 		static void OP_9xy0(uint16_t operationCode, uint16_t& programCounter, Registers& registers);
 		static void OP_Annn(uint16_t operationCode, Registers&);
-		//static void OP_Bnnn(uint16_t operationCode, Registers&);
+		static void OP_Bnnn(uint16_t operationCode, uint16_t& programCounter, Registers& reg);
 		static void OP_Cxkk(uint16_t operationCode, Registers&);
 		static void OP_Dxyn(uint16_t operationCode, Registers&, Display&, Memory&);
 

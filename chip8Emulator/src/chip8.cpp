@@ -154,6 +154,9 @@ namespace chip8 {
 		case 0xA:
 			Instruction::OP_Annn(ins, _registers);
 			break;
+		case 0xB:
+			Instruction::OP_Bnnn(ins, _PC, _registers);
+			break;
 		case 0xC:
 			Instruction::OP_Cxkk(ins, _registers);
 			break;
