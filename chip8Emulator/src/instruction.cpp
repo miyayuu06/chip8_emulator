@@ -215,7 +215,7 @@ namespace chip8 {
 		uint8_t Vx = getVx(operationCode);
 		bool flag = false;
 		uint8_t key = 0;
-		for (int i = 0; i < 256; i++) {
+		for (int i = 0; i < 16; i++) {
 			if (keypad.read(i)) {
 				flag = true; key = i;
 				break;
@@ -225,7 +225,7 @@ namespace chip8 {
 			programCounter -= 2;
 		}
 		else {
-			reg.write(Vx, key);
+			reg.write(Vx, (uint8_t) key);
 		}
 	}
 

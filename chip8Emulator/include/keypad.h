@@ -14,6 +14,7 @@ namespace chip8 {
 		void reset();
 
 	private:
-		std::array<bool, 256> _keyValues;
+		std::array<bool, 16> _keyValues;
+		const std::string _KEYREFERENCE = "X123QWEASDZC4RFV";
 	};
 }

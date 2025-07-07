@@ -40,7 +40,8 @@ namespace chip8 {
 		while (!quit/*_PC - PROGRAM_START < programDataSize*/) {
 			/* Debugging, checking registers */
 
-			std::cout << _PC << ", instruccion: ";
+			_keypad.reset();
+			//std::cout << _PC << ", instruccion: ";
 			cycle();
 			//Sleep(1000/60);
 
@@ -51,10 +52,15 @@ namespace chip8 {
 				std::cout << std::endl;
 			}*/
 			//Sleep(100);
-			for (int i = 0; i < 16; i++) {
+			/*for (int i = 0; i < 16; i++) {
 				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
 			}
 			std::cout << "I " << _registers.iRead() << std::endl;
+			std::cout << std::endl << std::endl;*/
+
+			for (int i = 0; i < 16; i++) {
+				std::cout << _keypad.read(i) << " | ";
+			}
 			std::cout << std::endl << std::endl;
 
 			quit = GetAsyncKeyState(32);
@@ -209,8 +215,8 @@ namespace chip8 {
 				assert(15);
 			}
 		default:
-			std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
-			assert(insType);
+			//std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
+			//assert(insType);
 			break;
 		}
 		return type;
@@ -225,13 +231,11 @@ namespace chip8 {
 		
 		_graphics.draw(_display);
 
-		if (_delayTimer.read()) {
+		if (_delayTimer.read() > 0) {
 			_delayTimer.decrement();
 		}
-		if (_soundTimer.read()) {
+		if (_soundTimer.read() > 0) {
 			_soundTimer.decrement();
 		}
-
-		_keypad.reset();
 	}
 };
