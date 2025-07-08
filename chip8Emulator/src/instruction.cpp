@@ -7,11 +7,11 @@ namespace chip8 {
 	// Instruction with unique first digit
 
 	uint8_t Instruction::getVx(uint16_t& operationCode) {
-		return (operationCode & 0xF00) >> 8;
+		return (operationCode >> 8) & 0x0F;
 	}
 
 	uint8_t Instruction::getVy(uint16_t& operationCode) {
-		return (operationCode & 0x0F0) >> 4;
+		return (operationCode >> 4) & 0x00F;
 	}
 
 	void Instruction::OP_00E0(Display& display) {
@@ -152,8 +152,8 @@ namespace chip8 {
 		uint8_t Vy = getVy(operationCode);
 		uint16_t result = reg.read(Vx) + reg.read(Vy);
 
-		reg.write(Vx, (uint8_t) result);
-		if (result > 0xFFu) {
+		reg.write(Vx, (uint8_t) result & 0xFF);
+		if (result > 0xFF) {
 			reg.write(0xF, 1);
 		}
 		else {
@@ -167,16 +167,17 @@ namespace chip8 {
 		uint8_t Vx = reg.read(x);
 		uint8_t Vy = reg.read(getVy(operationCode));
 		
-		reg.write(0xF, (uint8_t) (Vx > Vy));
 		reg.write(x, (uint8_t) (Vx - Vy));
+		reg.write(0xF, (bool)(Vx >= Vy));
 	}
 
 	void Instruction::OP_8xy6(uint16_t operationCode, Registers& reg) {
 		uint8_t Vx = getVx(operationCode);
 		uint8_t aux = reg.read(Vx);
 
-		reg.write(0xF, (uint8_t)(aux & 1));
+		
 		reg.write(Vx, (uint8_t) (aux >> 1));
+		reg.write(0xF, (bool)(aux & 1));
 	}
 
 	void Instruction::OP_8xy7(uint16_t operationCode, Registers& reg) {
@@ -184,17 +185,17 @@ namespace chip8 {
 		uint8_t Vx = reg.read(x);
 		uint8_t Vy = reg.read(getVy(operationCode));
 
-		reg.write(0xF, (uint8_t) (Vy > Vx));
 		reg.write(x, (uint8_t) (Vy - Vx));
+		reg.write(0xF, (Vy >= Vx) ? 0x01 : 0x00);
 	}
 
 	void Instruction::OP_8xyE(uint16_t operationCode, Registers& reg) {
 		uint8_t Vx = getVx(operationCode);
 		uint8_t aux = reg.read(Vx);
 		uint8_t result = aux << 1;
-			
-		reg.write(0xF, (uint8_t) ((aux & 0x80) >> 7));
+		
 		reg.write(Vx, result);
+		reg.write(0xF, (uint8_t)((aux & 0x80) >> 7));
 	}
 
 	/* E type instructions */

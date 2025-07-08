@@ -53,12 +53,6 @@ namespace chip8 {
 				std::cout << std::endl;
 			}*/
 
-			/*for (int i = 0; i < 16; i++) {
-				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
-			}
-			std::cout << "I " << _registers.iRead() << std::endl;
-			std::cout << std::endl << std::endl;*/
-
 			/* End of debugging */
 
 		}
@@ -74,7 +68,7 @@ namespace chip8 {
 		case 0:
 			switch (ins & 0xF00) {
 			case 0:
-				if (ins & 0xF) {
+				if ((ins & 0xFF) == 0xEE) {
 					Instruction::OP_00EE(_PC, _stack);
 				}
 				else {
@@ -143,6 +137,7 @@ namespace chip8 {
 				assert(8);
 				break;
 			}
+			break;
 		case 9:
 			Instruction::OP_9xy0(ins, _PC, _registers);
 			break;
@@ -203,6 +198,7 @@ namespace chip8 {
 			default:
 				assert(15);
 			}
+			break;
 		default:
 			//std::cout << std::endl << insType << ((ins & 0xF0) >> 4) << std::endl;
 			//assert(insType);
@@ -217,6 +213,11 @@ namespace chip8 {
 			_PC += 2;
 
 			std::string decodification = decode(operationCode);
+			/*for (int i = 0; i < 16; i++) {
+				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
+			}
+			std::cout << "I " << _registers.iRead() << std::endl;
+			std::cout << std::endl << std::endl;*/
 		}
 
 		if (_delayTimer.read() > 0) {
