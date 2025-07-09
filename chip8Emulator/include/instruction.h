@@ -48,8 +48,8 @@ namespace chip8 {
 
 		/* E instructions */
 
-		static void OP_Ex9E(uint16_t instruction, uint16_t& programCounter, Registers& reg, Keypad& keypad);
-		static void OP_ExA1(uint16_t instruction, uint16_t& programCounter, Registers& reg, Keypad& keypad);
+		static void OP_Ex9E(uint16_t operationCode, uint16_t& programCounter, Registers& reg, Keypad& keypad);
+		static void OP_ExA1(uint16_t operationCode, uint16_t& programCounter, Registers& reg, Keypad& keypad);
 
 		/* F instructions */
 

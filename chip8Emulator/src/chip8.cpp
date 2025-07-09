@@ -208,7 +208,7 @@ namespace chip8 {
 	}
 
 	void Chip8::cycle() {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 10; i++) {
 			uint16_t operationCode = _memory.read(_PC);
 			_PC += 2;
 

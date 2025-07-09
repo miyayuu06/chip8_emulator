@@ -9,7 +9,7 @@ namespace chip8 {
 	public:
 		Graphics();
 		~Graphics();
-		void draw(Display display);
+		void draw(Display& display);
 		bool update(Keypad& keypad);
 	private:
 		SDL_Window* window;

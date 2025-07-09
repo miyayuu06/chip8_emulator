@@ -185,8 +185,7 @@ namespace chip8 {
 		uint8_t aux = reg.read(getVy(operationCode));
 
 		// Shifting quirks off
-		//uint8_t aux2 = reg.read(Vx);
-
+		// uint8_t aux2 = reg.read(Vx);
 		
 		reg.write(Vx, (uint8_t) (aux >> 1));
 		reg.write(0xF, (bool)(aux & 1));
