@@ -77,7 +77,6 @@ namespace chip8 {
 				}
 				break;
 			default:
-				
 				std::cout << "SYS addr" << std::endl;
 				break;
 				//assert(0);
@@ -197,6 +196,7 @@ namespace chip8 {
 				break;
 			default:
 				assert(15);
+				break;
 			}
 			break;
 		default:

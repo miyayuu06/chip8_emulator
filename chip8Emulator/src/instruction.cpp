@@ -98,13 +98,19 @@ namespace chip8 {
 			for (int j = 0; j < 8; ++j) {
 				//std::cout << (x + i) << " " << (y + j) << std::endl;
 				bool result = (spriteByte >> (7-j)) & 1;
-				bool displayPixel = display.read((y + i) % 32, (x + j) % 64);
-				bool xorResult = result ^ displayPixel;
+				if (result) {
+					int vx = (x & 63) + j;
+					int vy = (y & 31) + i;
+					if ((vx < 64) && (vy < 32)) {
+						bool displayPixel = display.read(vy, vx);
+						bool xorResult = result ^ displayPixel;
 
-				if (!xorResult && displayPixel) {
-					reg.write(0xF, (uint8_t) 1);
+						if (!xorResult && displayPixel) {
+							reg.write(0xF, (uint8_t)1);
+						}
+						display.write(vy, vx, xorResult);
+					}
 				}
-				display.write((y + i) % 32, (x + j) % 64, xorResult);
 			}
 		}
 		/*
@@ -131,6 +137,7 @@ namespace chip8 {
 		uint8_t Vy = getVy(operationCode);
 
 		reg.write(Vx, (uint8_t) (reg.read(Vx) | reg.read(Vy)));
+		reg.write(0xF, 0);
 	}
 
 	void Instruction::OP_8xy2(uint16_t operationCode, Registers& reg) {
@@ -138,6 +145,7 @@ namespace chip8 {
 		uint8_t Vy = getVy(operationCode);
 
 		reg.write(Vx, (uint8_t) (reg.read(Vx) & reg.read(Vy)));
+		reg.write(0xF, 0);
 	}
 
 	void Instruction::OP_8xy3(uint16_t operationCode, Registers& reg) {
@@ -145,6 +153,7 @@ namespace chip8 {
 		uint8_t Vy = getVy(operationCode);
 
 		reg.write(Vx, (uint8_t) (reg.read(Vx) ^ reg.read(Vy)));
+		reg.write(0xF, 0);
 	}
 
 	void Instruction::OP_8xy4(uint16_t operationCode, Registers& reg) {
@@ -173,7 +182,10 @@ namespace chip8 {
 
 	void Instruction::OP_8xy6(uint16_t operationCode, Registers& reg) {
 		uint8_t Vx = getVx(operationCode);
-		uint8_t aux = reg.read(Vx);
+		uint8_t aux = reg.read(getVy(operationCode));
+
+		// Shifting quirks off
+		//uint8_t aux2 = reg.read(Vx);
 
 		
 		reg.write(Vx, (uint8_t) (aux >> 1));
@@ -191,8 +203,11 @@ namespace chip8 {
 
 	void Instruction::OP_8xyE(uint16_t operationCode, Registers& reg) {
 		uint8_t Vx = getVx(operationCode);
-		uint8_t aux = reg.read(Vx);
+		uint8_t aux = reg.read(getVy(operationCode));
 		uint8_t result = aux << 1;
+
+		// Shifting quirks off
+		// uint8_t aux2 = reg.read(Vx);
 		
 		reg.write(Vx, result);
 		reg.write(0xF, (uint8_t)((aux & 0x80) >> 7));
@@ -273,6 +288,8 @@ namespace chip8 {
 		for (uint8_t i = 0; i <= x; ++i) {
 			mem.write(address + i, reg.read(i));
 		}
+
+		reg.iWrite(address + x + 1);
 	}
 
 	void Instruction::OP_Fx65(uint16_t operationCode, Registers& reg, Memory& mem) {
@@ -281,5 +298,7 @@ namespace chip8 {
 		for (uint8_t i = 0; i <= x; ++i) {
 			reg.write(i, mem.readByte(address + i));
 		}
+
+		reg.iWrite(address + x + 1);
 	}
 }
