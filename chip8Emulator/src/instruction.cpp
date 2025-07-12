@@ -300,4 +300,61 @@ namespace chip8 {
 
 		reg.iWrite(address + x + 1);
 	}
+
+	/* Implementación con interfaz uniforme */
+
+	void Instruction::OP_00E0(uint16_t operationCode, Chip8& chip) {
+		for (int i = 0; i < 32; i++) {
+			for (int j = 0; j < 64; j++) {
+				chip._display.write(i, j, false);
+			}
+		}
+	}
+	void Instruction::OP_00EE(uint16_t operationCode, Chip8& chip) {
+		chip._PC = chip._stack.pop();
+	}
+
+	// "First digit is unique" instructions
+
+	void OP_1nnn(uint16_t operationCode, Chip8& chip);
+	void OP_2nnn(uint16_t operationCode, Chip8& chip);
+	void OP_3xkk(uint16_t operationCode, Chip8& chip);
+	void OP_4xkk(uint16_t operationCode, Chip8& chip);
+	void OP_5xy0(uint16_t operationCode, Chip8& chip);
+	void OP_6xkk(uint16_t operationCode, Chip8& chip);
+	void OP_7xkk(uint16_t operationCode, Chip8& chip);
+	void OP_9xy0(uint16_t operationCode, Chip8& chip);
+	void OP_Annn(uint16_t operationCode, Chip8& chip);
+	void OP_Bnnn(uint16_t operationCode, Chip8& chip);
+	void OP_Cxkk(uint16_t operationCode, Chip8& chip);
+	void OP_Dxyn(uint16_t operationCode, Chip8& chip);
+
+	// "First digit is 8" instructions
+
+	void OP_8xy0(uint16_t operationCode, Chip8& chip);
+	void OP_8xy1(uint16_t operationCode, Chip8& chip);
+	void OP_8xy2(uint16_t operationCode, Chip8& chip);
+	void OP_8xy3(uint16_t operationCode, Chip8& chip);
+	void OP_8xy4(uint16_t operationCode, Chip8& chip);
+	void OP_8xy5(uint16_t operationCode, Chip8& chip);
+	void OP_8xy6(uint16_t operationCode, Chip8& chip);
+	void OP_8xy7(uint16_t operationCode, Chip8& chip);
+	void OP_8xyE(uint16_t operationCode, Chip8& chip);
+
+	/* E instructions */
+
+	void OP_Ex9E(uint16_t operationCode, Chip8& chip);
+	void OP_ExA1(uint16_t operationCode, Chip8& chip);
+
+	/* F instructions */
+
+	void OP_Fx07(uint16_t operationCode, Chip8& chip);
+	void OP_Fx0A(uint16_t operationCode, Chip8& chip);
+	void OP_Fx15(uint16_t operationCode, Chip8& chip);
+	void OP_Fx18(uint16_t operationCode, Chip8& chip);
+	void OP_Fx1E(uint16_t operationCode, Chip8& chip);
+	void OP_Fx29(uint16_t operationCode, Chip8& chip);
+	void OP_Fx33(uint16_t operationCode, Chip8& chip);
+	void OP_Fx55(uint16_t operationCode, Chip8& chip);
+	void OP_Fx65(uint16_t operationCode, Chip8& chip);
 }

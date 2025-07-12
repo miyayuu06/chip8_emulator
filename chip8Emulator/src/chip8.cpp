@@ -1,6 +1,7 @@
 #include "chip8.h"
-#include <filesystem>
+#include "instruction.h"
 
+#include <filesystem>
 #include <cassert>
 
 namespace chip8 {
@@ -37,23 +38,14 @@ namespace chip8 {
 	void Chip8::program(int programDataSize) {
 		_PC = PROGRAM_START;
 		int quit = 0;
+
 		while (!quit) {
-			/* Debugging, checking registers */
 
 			quit = _graphics.update(_keypad);
 			_graphics.draw(_display);
-			//std::cout << _PC << ", instruccion: ";
 			cycle();
 			Sleep(1000/60);
 
-			/*for (int i = 0; i < 32; i++) {
-				for (int j = 0; j < 64; j++) {
-					std::cout << _display.read(i, j);
-				}
-				std::cout << std::endl;
-			}*/
-
-			/* End of debugging */
 
 		}
 
@@ -69,17 +61,16 @@ namespace chip8 {
 			switch (ins & 0xF00) {
 			case 0:
 				if ((ins & 0xFF) == 0xEE) {
-					Instruction::OP_00EE(_PC, _stack);
+					Instruction::OP_00EE(ins, *this);
 				}
 				else {
-					Instruction::OP_00E0(_display);
+					Instruction::OP_00E0(ins, *this);
 					return "YES";
 				}
 				break;
 			default:
 				std::cout << "SYS addr" << std::endl;
 				break;
-				//assert(0);
 			}
 			break;
 		case 1:
@@ -212,7 +203,7 @@ namespace chip8 {
 			uint16_t operationCode = _memory.read(_PC);
 			_PC += 2;
 
-			std::string decodification = decode(operationCode);
+			decode(operationCode);
 			/*for (int i = 0; i < 16; i++) {
 				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
 			}

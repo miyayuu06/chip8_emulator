@@ -1,6 +1,11 @@
 #pragma once
-#include "instruction.h"
 #include "graphics.h"
+#include "registers.h"
+#include "display.h"
+#include "timer.h"
+#include "stack.h"
+#include "memory.h"
+#include "keypad.h"
 
 #include <iostream>
 #include <vector>
@@ -10,7 +15,7 @@
 // Sólo un namespace Chip8
 
 namespace chip8 {
-	class Chip8 {
+	struct Chip8 {
 	public:
 		const uint16_t PROGRAM_START = 0x200;
 		Chip8();
@@ -22,7 +27,6 @@ namespace chip8 {
 
 		std::string decode(uint16_t);
 
-	private:
 		Registers _registers;
 		Memory _memory;
 		Display _display;
