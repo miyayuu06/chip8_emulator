@@ -74,16 +74,16 @@ namespace chip8 {
 			}
 			break;
 		case 1:
-			Instruction::OP_1nnn(ins, _PC);
+			Instruction::OP_1nnn(ins, *this);
 			break;
 		case 2:
-			Instruction::OP_2nnn(ins, _PC, _stack);
+			Instruction::OP_2nnn(ins, *this);
 			break;
 		case 3:
-			Instruction::OP_3xkk(ins, _PC, _registers);
+			Instruction::OP_3xkk(ins, *this);
 			break;
 		case 4:
-			Instruction::OP_4xkk(ins, _PC, _registers);
+			Instruction::OP_4xkk(ins, *this);
 			break;
 		case 5:
 			Instruction::OP_5xy0(ins, _PC, _registers);

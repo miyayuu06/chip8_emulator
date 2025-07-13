@@ -64,12 +64,12 @@ namespace chip8 {
 		static void OP_00E0(uint16_t operationCode, Chip8& chip);
 		static void OP_00EE(uint16_t operationCode, Chip8& chip);
 
-		//// "First digit is unique" instructions
+		// "First digit is unique" instructions
 
-		//static void OP_1nnn(uint16_t operationCode, Chip8& chip);
-		//static void OP_2nnn(uint16_t operationCode, Chip8& chip);
-		//static void OP_3xkk(uint16_t operationCode, Chip8& chip);
-		//static void OP_4xkk(uint16_t operationCode, Chip8& chip);
+		static void OP_1nnn(uint16_t operationCode, Chip8& chip);
+		static void OP_2nnn(uint16_t operationCode, Chip8& chip);
+		static void OP_3xkk(uint16_t operationCode, Chip8& chip);
+		static void OP_4xkk(uint16_t operationCode, Chip8& chip);
 		//static void OP_5xy0(uint16_t operationCode, Chip8& chip);
 		//static void OP_6xkk(uint16_t operationCode, Chip8& chip);
 		//static void OP_7xkk(uint16_t operationCode, Chip8& chip);

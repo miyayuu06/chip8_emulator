@@ -16,9 +16,9 @@ Graphics::~Graphics() {
 }
 
 void Graphics::draw(Display& display) {
-	SDL_SetRenderDrawColor(renderer, 255, 156, 207, 255);
+	SDL_SetRenderDrawColor(renderer, 60, 65, 44, 255);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 245, 40, 145, 255);
+	SDL_SetRenderDrawColor(renderer, 168, 198, 78, 255);
 
 	for (int i = 0; i < 32; i++) {
 		for (int j = 0; j < 64; j++) {

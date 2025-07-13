@@ -316,10 +316,25 @@ namespace chip8 {
 
 	// "First digit is unique" instructions
 
-	void OP_1nnn(uint16_t operationCode, Chip8& chip);
-	void OP_2nnn(uint16_t operationCode, Chip8& chip);
-	void OP_3xkk(uint16_t operationCode, Chip8& chip);
-	void OP_4xkk(uint16_t operationCode, Chip8& chip);
+	void Instruction::OP_1nnn(uint16_t operationCode, Chip8& chip) {
+		chip._PC= (operationCode & 0xFFF);
+	}
+
+	void Instruction::OP_2nnn(uint16_t operationCode, Chip8& chip) {
+		chip._stack.push(chip._PC);
+		chip._PC = operationCode & 0xFFF;
+	}
+
+	void Instruction::OP_3xkk(uint16_t operationCode, Chip8& chip) {
+		if (chip._registers.read(getVx(operationCode)) == (operationCode & 0xFF)) {
+			chip._PC += 2;
+		}
+	}
+	void Instruction::OP_4xkk(uint16_t operationCode, Chip8& chip) {
+		if (chip._registers.read(getVx(operationCode)) != (operationCode & 0xFF)) {
+			chip._PC += 2;
+		}
+	}
 	void OP_5xy0(uint16_t operationCode, Chip8& chip);
 	void OP_6xkk(uint16_t operationCode, Chip8& chip);
 	void OP_7xkk(uint16_t operationCode, Chip8& chip);
