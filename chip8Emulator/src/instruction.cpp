@@ -113,14 +113,6 @@ namespace chip8 {
 				}
 			}
 		}
-		/*
-		// Console debug test
-		for (int i = 0; i < 32; i++) {
-			for (int j = 0; j < 64; j++) {
-				std::cout << (display.read(i, j) ? '#' : ' ');
-			}
-			std::cout << std::endl;
-		}*/
 	}
 
 	/* 8 type instructions */
@@ -335,14 +327,72 @@ namespace chip8 {
 			chip._PC += 2;
 		}
 	}
-	void OP_5xy0(uint16_t operationCode, Chip8& chip);
-	void OP_6xkk(uint16_t operationCode, Chip8& chip);
-	void OP_7xkk(uint16_t operationCode, Chip8& chip);
-	void OP_9xy0(uint16_t operationCode, Chip8& chip);
-	void OP_Annn(uint16_t operationCode, Chip8& chip);
-	void OP_Bnnn(uint16_t operationCode, Chip8& chip);
-	void OP_Cxkk(uint16_t operationCode, Chip8& chip);
-	void OP_Dxyn(uint16_t operationCode, Chip8& chip);
+
+	void Instruction::OP_5xy0(uint16_t operationCode, Chip8& chip) {
+		if (chip._registers.read(getVx(operationCode)) == chip._registers.read(getVy(operationCode))) {
+			chip._PC += 2;
+		}
+	}
+
+	void Instruction::OP_6xkk(uint16_t operationCode, Chip8& chip) {
+		chip._registers.write(getVx(operationCode), (uint8_t) (operationCode & 0xFF));
+	}
+	void Instruction::OP_7xkk(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t result = (chip._registers.read(Vx) + (operationCode & 0xFF));
+
+		chip._registers.write(Vx, result);
+	}
+
+	void Instruction::OP_9xy0(uint16_t operationCode, Chip8& chip) {
+		if (chip._registers.read(getVx(operationCode)) != chip._registers.read(getVy(operationCode))) {
+			chip._PC += 2;
+		}
+	}
+
+	void Instruction::OP_Annn(uint16_t operationCode, Chip8& chip) {
+		chip._registers.iWrite(operationCode & 0xFFF);
+	}
+
+	void Instruction::OP_Bnnn(uint16_t operationCode, Chip8& chip) {
+		uint8_t V0 = chip._registers.read(0);
+		chip._PC = (operationCode & 0xFFF) + V0;
+	}
+
+	void Instruction::OP_Cxkk(uint16_t operationCode, Chip8& chip) {
+		uint8_t result = (operationCode & 0xFF) & (std::rand() % 256);
+		chip._registers.write(getVx(operationCode), result);
+	}
+	void Instruction::OP_Dxyn(uint16_t operationCode, Chip8& chip) {
+		uint8_t x = chip._registers.read(getVx(operationCode));
+		uint8_t y = chip._registers.read(getVy(operationCode));
+
+		chip._registers.write(0xF, (uint8_t)0);
+
+		uint8_t n = operationCode & 0xF;
+		uint16_t address = chip._registers.iRead();
+
+		for (int i = 0; i < n; ++i) {
+			uint8_t spriteByte = chip._memory.readByte(address + i);
+			for (int j = 0; j < 8; ++j) {
+				//std::cout << (x + i) << " " << (y + j) << std::endl;
+				bool result = (spriteByte >> (7 - j)) & 1;
+				if (result) {
+					int vx = (x & 63) + j;
+					int vy = (y & 31) + i;
+					if ((vx < 64) && (vy < 32)) {
+						bool displayPixel = chip._display.read(vy, vx);
+						bool xorResult = result ^ displayPixel;
+
+						if (!xorResult && displayPixel) {
+							chip._registers.write(0xF, (uint8_t)1);
+						}
+						chip._display.write(vy, vx, xorResult);
+					}
+				}
+			}
+		}
+	}
 
 	// "First digit is 8" instructions
 

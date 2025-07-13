@@ -86,13 +86,13 @@ namespace chip8 {
 			Instruction::OP_4xkk(ins, *this);
 			break;
 		case 5:
-			Instruction::OP_5xy0(ins, _PC, _registers);
+			Instruction::OP_5xy0(ins, *this);
 			break;
 		case 6:
-			Instruction::OP_6xkk(ins, _registers);
+			Instruction::OP_6xkk(ins, *this);
 			break;
 		case 7:
-			Instruction::OP_7xkk(ins, _registers);
+			Instruction::OP_7xkk(ins, *this);
 			break;
 		case 8:
 			switch (ins & 0xF) {
@@ -129,19 +129,19 @@ namespace chip8 {
 			}
 			break;
 		case 9:
-			Instruction::OP_9xy0(ins, _PC, _registers);
+			Instruction::OP_9xy0(ins, *this);
 			break;
 		case 0xA:
-			Instruction::OP_Annn(ins, _registers);
+			Instruction::OP_Annn(ins, *this);
 			break;
 		case 0xB:
-			Instruction::OP_Bnnn(ins, _PC, _registers);
+			Instruction::OP_Bnnn(ins, *this);
 			break;
 		case 0xC:
-			Instruction::OP_Cxkk(ins, _registers);
+			Instruction::OP_Cxkk(ins, *this);
 			break;
 		case 0xD:
-			Instruction::OP_Dxyn(ins, _registers, _display, _memory);
+			Instruction::OP_Dxyn(ins, *this);
 			break;
 		case 0xE:
 			if ((ins & 0xF) == 0xE) {

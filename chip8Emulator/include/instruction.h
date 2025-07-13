@@ -70,14 +70,14 @@ namespace chip8 {
 		static void OP_2nnn(uint16_t operationCode, Chip8& chip);
 		static void OP_3xkk(uint16_t operationCode, Chip8& chip);
 		static void OP_4xkk(uint16_t operationCode, Chip8& chip);
-		//static void OP_5xy0(uint16_t operationCode, Chip8& chip);
-		//static void OP_6xkk(uint16_t operationCode, Chip8& chip);
-		//static void OP_7xkk(uint16_t operationCode, Chip8& chip);
-		//static void OP_9xy0(uint16_t operationCode, Chip8& chip);
-		//static void OP_Annn(uint16_t operationCode, Chip8& chip);
-		//static void OP_Bnnn(uint16_t operationCode, Chip8& chip);
-		//static void OP_Cxkk(uint16_t operationCode, Chip8& chip);
-		//static void OP_Dxyn(uint16_t operationCode, Chip8& chip);
+		static void OP_5xy0(uint16_t operationCode, Chip8& chip);
+		static void OP_6xkk(uint16_t operationCode, Chip8& chip);
+		static void OP_7xkk(uint16_t operationCode, Chip8& chip);
+		static void OP_9xy0(uint16_t operationCode, Chip8& chip);
+		static void OP_Annn(uint16_t operationCode, Chip8& chip);
+		static void OP_Bnnn(uint16_t operationCode, Chip8& chip);
+		static void OP_Cxkk(uint16_t operationCode, Chip8& chip);
+		static void OP_Dxyn(uint16_t operationCode, Chip8& chip);
 
 		//// "First digit is 8" instructions
 
