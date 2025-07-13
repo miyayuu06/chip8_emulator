@@ -29,7 +29,7 @@ namespace chip8 {
 		for (int i = 0; i < 16; i++) {
 			_registers.write(i, 0);
 		}
-		Instruction::OP_00E0(_display);
+		Instruction::OP_00E0(0, *this);
 		_registers.iWrite(0);
 
 		return programData.size();
@@ -145,20 +145,20 @@ namespace chip8 {
 			break;
 		case 0xE:
 			if ((ins & 0xF) == 0xE) {
-				Instruction::OP_Ex9E(ins, _PC, _registers, _keypad);
+				Instruction::OP_Ex9E(ins, *this);
 			}
 			else {
-				Instruction::OP_ExA1(ins, _PC, _registers, _keypad);
+				Instruction::OP_ExA1(ins, *this);
 			}
 			break;
 		case 0xF:
 			switch ((ins & 0xF0) >> 4) {
 			case 0:
 				if ((ins & 0xF) == 0x7) {
-					Instruction::OP_Fx07(ins, _registers, _delayTimer);
+					Instruction::OP_Fx07(ins, *this);
 				}
 				else if ((ins & 0xF) == 0xA) {
-					Instruction::OP_Fx0A(ins, _PC, _registers, _keypad);
+					Instruction::OP_Fx0A(ins, *this);
 				}
 				else {
 					assert(150);
@@ -166,24 +166,24 @@ namespace chip8 {
 				break;
 			case 1:
 				if ((ins & 0xF) == 0xE) {
-					Instruction::OP_Fx1E(ins, _registers);
+					Instruction::OP_Fx1E(ins, *this);
 					break;
 				}
 				else {
-					Instruction::OP_Fx18(ins, _registers, _soundTimer);
+					Instruction::OP_Fx18(ins, *this);
 					break;
 				}
 			case 2:
-				Instruction::OP_Fx29(ins, _registers, _memory);
+				Instruction::OP_Fx29(ins, *this);
 				break;
 			case 3:
-				Instruction::OP_Fx33(ins, _registers, _memory);
+				Instruction::OP_Fx33(ins, *this);
 				break;
 			case 5:
-				Instruction::OP_Fx55(ins, _registers, _memory);
+				Instruction::OP_Fx55(ins, *this);
 				break;
 			case 0x6:
-				Instruction::OP_Fx65(ins, _registers, _memory);
+				Instruction::OP_Fx65(ins, *this);
 				break;
 			default:
 				assert(15);
