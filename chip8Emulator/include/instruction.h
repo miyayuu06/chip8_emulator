@@ -79,17 +79,17 @@ namespace chip8 {
 		static void OP_Cxkk(uint16_t operationCode, Chip8& chip);
 		static void OP_Dxyn(uint16_t operationCode, Chip8& chip);
 
-		//// "First digit is 8" instructions
+		// "First digit is 8" instructions
 
-		//static void OP_8xy0(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xy1(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xy2(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xy3(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xy4(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xy5(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xy6(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xy7(uint16_t operationCode, Chip8& chip);
-		//static void OP_8xyE(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy0(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy1(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy2(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy3(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy4(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy5(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy6(uint16_t operationCode, Chip8& chip);
+		static void OP_8xy7(uint16_t operationCode, Chip8& chip);
+		static void OP_8xyE(uint16_t operationCode, Chip8& chip);
 
 		///* E instructions */
 

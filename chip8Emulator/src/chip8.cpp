@@ -97,31 +97,31 @@ namespace chip8 {
 		case 8:
 			switch (ins & 0xF) {
 			case 0:
-				Instruction::OP_8xy0(ins, _registers);
+				Instruction::OP_8xy0(ins, *this);
 				break;
 			case 1:
-				Instruction::OP_8xy1(ins, _registers);
+				Instruction::OP_8xy1(ins, *this);
 				break;
 			case 2:
-				Instruction::OP_8xy2(ins, _registers);
+				Instruction::OP_8xy2(ins, *this);
 				break;
 			case 3:
-				Instruction::OP_8xy3(ins, _registers);
+				Instruction::OP_8xy3(ins, *this);
 				break;
 			case 4:
-				Instruction::OP_8xy4(ins, _registers);
+				Instruction::OP_8xy4(ins, *this);
 				break;
 			case 5:
-				Instruction::OP_8xy5(ins, _registers);
+				Instruction::OP_8xy5(ins, *this);
 				break;
 			case 6:
-				Instruction::OP_8xy6(ins, _registers);
+				Instruction::OP_8xy6(ins, *this);
 				break;
 			case 7:
-				Instruction::OP_8xy7(ins, _registers);
+				Instruction::OP_8xy7(ins, *this);
 				break;
 			case 0xE:
-				Instruction::OP_8xyE(ins, _registers);
+				Instruction::OP_8xyE(ins, *this);
 				break;
 			default:
 				assert(8);

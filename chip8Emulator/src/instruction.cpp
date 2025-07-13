@@ -396,15 +396,87 @@ namespace chip8 {
 
 	// "First digit is 8" instructions
 
-	void OP_8xy0(uint16_t operationCode, Chip8& chip);
-	void OP_8xy1(uint16_t operationCode, Chip8& chip);
-	void OP_8xy2(uint16_t operationCode, Chip8& chip);
-	void OP_8xy3(uint16_t operationCode, Chip8& chip);
-	void OP_8xy4(uint16_t operationCode, Chip8& chip);
-	void OP_8xy5(uint16_t operationCode, Chip8& chip);
-	void OP_8xy6(uint16_t operationCode, Chip8& chip);
-	void OP_8xy7(uint16_t operationCode, Chip8& chip);
-	void OP_8xyE(uint16_t operationCode, Chip8& chip);
+	void Instruction::OP_8xy0(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t Vy = getVy(operationCode);
+
+		chip._registers.write(Vx, chip._registers.read(Vy));
+	}
+
+	void Instruction::OP_8xy1(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t Vy = getVy(operationCode);
+
+		chip._registers.write(Vx, (uint8_t)(chip._registers.read(Vx) | chip._registers.read(Vy)));
+		chip._registers.write(0xF, 0);
+	}
+
+	void Instruction::OP_8xy2(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t Vy = getVy(operationCode);
+
+		chip._registers.write(Vx, (uint8_t)(chip._registers.read(Vx) & chip._registers.read(Vy)));
+		chip._registers.write(0xF, 0);
+	}
+
+	void Instruction::OP_8xy3(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t Vy = getVy(operationCode);
+
+		chip._registers.write(Vx, (uint8_t)(chip._registers.read(Vx) ^ chip._registers.read(Vy)));
+		chip._registers.write(0xF, 0);
+	}
+
+	void Instruction::OP_8xy4(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t Vy = getVy(operationCode);
+		uint16_t result = chip._registers.read(Vx) + chip._registers.read(Vy);
+
+		chip._registers.write(Vx, (uint8_t)result & 0xFF);
+		if (result > 0xFF) {
+			chip._registers.write(0xF, 1);
+		}
+		else {
+			chip._registers.write(0xF, 0);
+		}
+	}
+
+	void Instruction::OP_8xy5(uint16_t operationCode, Chip8& chip) {
+		uint8_t x = getVx(operationCode);
+		uint8_t Vx = chip._registers.read(x);
+		uint8_t Vy = chip._registers.read(getVy(operationCode));
+
+		chip._registers.write(x, (uint8_t)(Vx - Vy));
+		chip._registers.write(0xF, (bool)(Vx >= Vy));
+	}
+
+	void Instruction::OP_8xy6(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t aux = chip._registers.read(getVy(operationCode));
+
+		chip._registers.write(Vx, (uint8_t)(aux >> 1));
+		chip._registers.write(0xF, (bool)(aux & 1));
+	}
+
+	void Instruction::OP_8xy7(uint16_t operationCode, Chip8& chip) {
+		uint8_t x = getVx(operationCode);
+		uint8_t Vx = chip._registers.read(x);
+		uint8_t Vy = chip._registers.read(getVy(operationCode));
+
+		chip._registers.write(x, (uint8_t)(Vy - Vx));
+		chip._registers.write(0xF, (bool)(Vx < Vy));
+	}
+	void Instruction::OP_8xyE(uint16_t operationCode, Chip8& chip) {
+		uint8_t Vx = getVx(operationCode);
+		uint8_t aux = chip._registers.read(getVy(operationCode));
+		uint8_t result = aux << 1;
+
+		// Shifting quirks off
+		// uint8_t aux2 = reg.read(Vx);
+
+		chip._registers.write(Vx, result);
+		chip._registers.write(0xF, (uint8_t)((aux & 0x80) >> 7));
+	}
 
 	/* E instructions */
 
