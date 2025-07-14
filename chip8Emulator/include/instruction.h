@@ -60,5 +60,19 @@ namespace chip8 {
 		static void OP_Fx33(uint16_t operationCode, Chip8& chip);
 		static void OP_Fx55(uint16_t operationCode, Chip8& chip);
 		static void OP_Fx65(uint16_t operationCode, Chip8& chip);
+
+		/* SuperChip instructions */
+
+		static void OP_00FE(uint16_t operationCode, Chip8& chip);
+		static void OP_00FF(uint16_t operationCode, Chip8& chip);
+		static void OP_00CN(uint16_t operationCode, Chip8& chip);
+		static void OP_00FB(uint16_t operationCode, Chip8& chip);
+		static void OP_00FC(uint16_t operationCode, Chip8& chip);
+		static void OP_00FD(uint16_t operationCode, Chip8& chip);
+
+		static void OP_FX30(uint16_t operationCode, Chip8& chip);
+		static void OP_FX75(uint16_t operationCode, Chip8& chip);
+		static void OP_FX85(uint16_t operationCode, Chip8& chip);
+
 	};
 }

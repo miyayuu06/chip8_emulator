@@ -10,7 +10,7 @@ using namespace chip8;
 int main()
 {
     Chip8 chip8;
-    int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/pong.ch8");
+    int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/br8kout.ch8");
     //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/2-ibm-logo.ch8");
     //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/3-corax+.ch8");
     //int programDataSize = chip8.load_rom("C:/Users/yunaf/Desktop/5-quirks.ch8");

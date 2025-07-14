@@ -9,6 +9,7 @@ namespace chip8 {
 	public:
 		Graphics();
 		~Graphics();
+		void setSize(int x, int y);
 		void draw(Display& display);
 		bool update(Keypad& keypad);
 	private:
@@ -22,5 +23,9 @@ namespace chip8 {
 			SDLK_S, SDLK_D, SDLK_Z, SDLK_C,
 			SDLK_4, SDLK_R, SDLK_F, SDLK_V
 		};
+
+		int height;
+		int width;
+		bool mode;
 	};
 };

@@ -7,6 +7,9 @@ using namespace chip8;
 Graphics::Graphics() {
 	window = SDL_CreateWindow("Chip-8 Display", 1280, 640, 0);
 	renderer = SDL_CreateRenderer(window, NULL);
+	height = 32;
+	width = 64;
+	mode = false;
 }
 
 Graphics::~Graphics() {
@@ -15,15 +18,22 @@ Graphics::~Graphics() {
 	SDL_Quit();
 }
 
+void Graphics::setSize(int x, int y) {
+	height = x;
+	width = y;
+	mode = (height == 64);
+}
+
 void Graphics::draw(Display& display) {
 	SDL_SetRenderDrawColor(renderer, 60, 65, 44, 255);
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 168, 198, 78, 255);
 
-	for (int i = 0; i < 32; i++) {
-		for (int j = 0; j < 64; j++) {
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
 			if (display.read(i, j)) {
-				pixel = { (float)20 * j, (float)20 * i, 20, 20 };
+				float size = mode ? 10 : 20;
+				pixel = { (float)size * j, (float)size * i, size, size};
 				SDL_RenderFillRect(renderer, &pixel);
 			}
 		}

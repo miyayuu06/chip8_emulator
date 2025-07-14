@@ -285,4 +285,16 @@ namespace chip8 {
 
 		chip._registers.iWrite(address + x + 1);
 	}
+
+	/* SuperChip instructions */
+
+	void Instruction::OP_00FF(uint16_t operationCode, Chip8& chip) {
+		chip._display.setMode(true);
+		chip._graphics.setSize(64, 128);
+	}
+
+	void Instruction::OP_00FE(uint16_t operationCode, Chip8& chip) {
+		chip._display.setMode(false);
+		chip._graphics.setSize(32, 64);
+	}
 }
