@@ -11,6 +11,7 @@
 #include <vector>
 #include <fstream>
 #include <Windows.h>
+#include <functional>
 
 // Sólo un namespace Chip8
 
@@ -25,7 +26,7 @@ namespace chip8 {
 		void cycle();
 		void program(int programData);
 
-		std::string decode(uint16_t);
+		void decode(uint16_t);
 
 		Registers _registers;
 		Memory _memory;
@@ -37,7 +38,16 @@ namespace chip8 {
 
 		Timer _delayTimer;
 		Timer _soundTimer;
-
 		Graphics _graphics;
+
+		using InstructionFunc = std::function<void(uint16_t, Chip8&)>;
+
+		struct InstructionEntry {
+			uint16_t mask;
+			uint16_t pattern;
+			InstructionFunc func;
+		};
+
+		std::vector<InstructionEntry> instructionTable;
 	};
 }
