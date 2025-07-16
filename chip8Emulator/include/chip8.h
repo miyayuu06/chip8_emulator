@@ -6,6 +6,7 @@
 #include "stack.h"
 #include "memory.h"
 #include "keypad.h"
+#include "audio.h"
 
 #include <iostream>
 #include <vector>
@@ -39,6 +40,7 @@ namespace chip8 {
 		Timer _delayTimer;
 		Timer _soundTimer;
 		Graphics _graphics;
+		Audio _buzzer;
 
 		using InstructionFunc = std::function<void(uint16_t, Chip8&)>;
 

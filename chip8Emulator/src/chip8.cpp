@@ -79,6 +79,7 @@ namespace chip8 {
 
 		while (!quit) {
 			quit = _graphics.update(_keypad);
+			_buzzer.update(_soundTimer.read());
 			_graphics.draw(_display);
 			cycle();
 			Sleep(1000/60);

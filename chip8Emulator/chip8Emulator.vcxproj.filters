@@ -44,6 +44,9 @@
     <ClCompile Include="include\src\graphics.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\audio.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\chip8.h">
@@ -71,6 +74,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\graphics.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\audio.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

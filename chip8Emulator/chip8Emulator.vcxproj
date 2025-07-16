@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\src\graphics.cpp" />
+    <ClCompile Include="src\audio.cpp" />
     <ClCompile Include="src\chip8.cpp" />
     <ClCompile Include="src\display.cpp" />
     <ClCompile Include="src\instruction.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\audio.h" />
     <ClInclude Include="include\chip8.h" />
     <ClInclude Include="include\display.h" />
     <ClInclude Include="include\graphics.h" />
