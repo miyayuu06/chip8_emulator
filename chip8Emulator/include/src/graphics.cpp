@@ -5,11 +5,14 @@
 using namespace chip8;
 
 Graphics::Graphics() {
-	window = SDL_CreateWindow("Chip-8 Display", 1280, 640, 0);
-	renderer = SDL_CreateRenderer(window, NULL);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	if (!SDL_CreateWindowAndRenderer("Chip8 Display", 1280, 640, SDL_WINDOW_OPENGL, &window, &renderer)) {
+		std::cout << "Window creation failed: " << SDL_GetError() << std::endl;
+	}
 	height = 32;
 	width = 64;
 	mode = false;
+	SDL_SetRenderVSync(renderer, SDL_RENDERER_VSYNC_ADAPTIVE);
 }
 
 Graphics::~Graphics() {

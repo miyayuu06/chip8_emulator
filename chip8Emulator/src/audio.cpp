@@ -38,24 +38,15 @@ namespace chip8 {
     void Audio::callback(void* userdata, SDL_AudioStream* stream, int additional_amount, int total_amount) {
         short* auxiliary = static_cast<short*>(userdata);
         auxiliary += pos;
-        if (pos + additional_amount >= 44100) {
-            int excess = (pos + additional_amount) % 44100;
-            if (!SDL_PutAudioStreamData(stream, auxiliary, additional_amount - excess)) {
-                std::cout << "SDL_OpenAudioDevice error1: " << SDL_GetError() << "\n";
+        while (additional_amount > 0) {
+            int writingSize = std::min(additional_amount, std::min(44100, additional_amount+pos) - pos);
+            if (!SDL_PutAudioStreamData(stream, auxiliary, writingSize)) {
+                std::cout << "SDL_OpenAudioDevice error: " << SDL_GetError() << "\n";
                 return;
             }
-            if (!SDL_PutAudioStreamData(stream, userdata, excess)) {
-                std::cout << "SDL_OpenAudioDevice error2: " << SDL_GetError() << "\n";
-                return;
-            }
-            pos = excess;
-        }
-        else {
-            if (!SDL_PutAudioStreamData(stream, auxiliary, additional_amount)) {
-                std::cout << "SDL_OpenAudioDevice error3: " << SDL_GetError() << "\n";
-                return;
-            }
-            pos += additional_amount;
+            additional_amount -= writingSize;
+            pos += writingSize;
+            pos %= 44100;
         }
     }
 

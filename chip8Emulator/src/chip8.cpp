@@ -107,11 +107,6 @@ namespace chip8 {
 			_PC += 2;
 
 			decode(operationCode);
-			/*for (int i = 0; i < 16; i++) {
-				std::cout << (i) << " " << +(_registers.read(i)) << " | ";
-			}
-			std::cout << "I " << _registers.iRead() << std::endl;
-			std::cout << std::endl << std::endl;*/
 		}
 
 		if (_delayTimer.read() > 0) {
