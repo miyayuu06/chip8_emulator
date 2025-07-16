@@ -2,6 +2,7 @@
 
 namespace chip8 {
 	Timer::Timer() {
+		value = 0;
 	}
 
 	Timer::~Timer() {
